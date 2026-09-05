@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 6: Turn Data into Fair Numbers</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="../sessions/03-unsupervised-learning-and-features/SESSION.md">Session folder</a><a href="0005-finding-groups-without-answers.html">Lesson 5</a></nav>
+  <p class="eyebrow">Session 03 follow-up · 8 minutes · D2</p>
+  <h1>Turn categories into numbers—without inventing an order</h1>
+  <p class="dek">Your tangible win: recognize when to encode categories and when to scale numbers before a distance-based model.</p>
+
+  <h2>Models need numbers</h2>
+  <p>A data table can contain numbers and words:</p>
+  <table>
+    <thead><tr><th>Customer</th><th>City</th><th>Monthly spend</th></tr></thead>
+    <tbody>
+      <tr><td>A</td><td>Riyadh</td><td>500 SAR</td></tr>
+      <tr><td>B</td><td>Jeddah</td><td>900 SAR</td></tr>
+      <tr><td>C</td><td>Dammam</td><td>300 SAR</td></tr>
+    </tbody>
+  </table>
+  <p>Most models need numeric input. <strong>Encoding</strong> converts a category such as a city name into numbers.</p>
+
+  <h2>One-hot encoding: one column per category</h2>
+  <p>For categories with no natural order, use <strong>one-hot encoding</strong>. Make one column for each possible category. Put <strong>1</strong> in the matching column and <strong>0</strong> in the others.</p>
+  <table>
+    <thead><tr><th>City</th><th>Riyadh</th><th>Jeddah</th><th>Dammam</th></tr></thead>
+    <tbody>
+      <tr><td>Riyadh</td><td>1</td><td>0</td><td>0</td></tr>
+      <tr><td>Jeddah</td><td>0</td><td>1</td><td>0</td></tr>
+    </tbody>
+  </table>
+  <p>Do <strong>not</strong> turn city names into 1, 2, and 3 unless those numbers genuinely mean order. Otherwise a model may incorrectly treat city 3 as “more” than city 1.</p>
+  <div class="rule"><strong>Memory rule:</strong> no real order → separate 0/1 columns.</div>
+
+  <h2>Scaling: stop big numbers from shouting</h2>
+  <p>Suppose a model compares distance using:</p>
+  <ul>
+    <li>Monthly spend: 0 to 100,000 SAR</li>
+    <li>App visits: 0 to 50</li>
+  </ul>
+  <p>Without <strong>scaling</strong>, monthly spend can dominate the distance simply because its numbers are larger. Scaling changes numeric features to comparable ranges. It does <em>not</em> decide which feature matters most; it prevents measurement units from deciding by accident.</p>
+  <p>Distance-based methods such as <strong>k-NN</strong>, <strong>k-means</strong>, and many <strong>SVMs</strong> need a scaling check. A decision tree usually does not depend on feature scale in the same way because it asks threshold questions such as “spend &gt; 500?”</p>
+
+  <h2>Closed-book check</h2>
+  <p>Answer before reopening the explanations. Each question locks after one choice.</p>
+
+  <section class="quiz" data-quiz data-answer="One-hot" data-explanation="City names have no natural numerical order. One-hot encoding gives each city its own 0/1 column without inventing an order.">
+    <strong>You have a customer’s city: Riyadh, Jeddah, or Dammam. What is the safest simple encoding?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="One-hot">One-hot</button>
+      <button class="quiz-option" data-value="Ranking">Ranking</button>
+      <button class="quiz-option" data-value="Scaling">Scaling</button>
+      <button class="quiz-option" data-value="Bagging">Bagging</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz data-answer="Scaling" data-explanation="k-means uses distances to group points. Scaling prevents a feature with large numerical units from dominating those distances.">
+    <strong>You use k-means with income in SAR and visits per month. What should you check before trusting the groups?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Scaling">Scaling</button>
+      <button class="quiz-option" data-value="Targets">Targets</button>
+      <button class="quiz-option" data-value="Bagging">Bagging</button>
+      <button class="quiz-option" data-value="Labels!">Labels!</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>Transfer prompt</h2>
+  <p>A retailer clusters customers using city, annual spending, and number of purchases. Name one feature that needs encoding and two features that may need scaling. Why?</p>
+
+  <h2>Primary source</h2>
+  <p>Read scikit-learn’s <a href="https://scikit-learn.org/stable/modules/preprocessing.html">Preprocessing Data</a> guide. It covers encoding categorical data and scaling numeric features before model fitting.</p>
+
+  <div class="callout">Ask me to explain any table in simpler words. When ready, answer the transfer prompt or say <strong>“quiz me on encoding and scaling”</strong>.</div>
+</main>
+</body>
+</html>

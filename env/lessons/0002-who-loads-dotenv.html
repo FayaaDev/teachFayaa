@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 0002 — Who Loads Dotenv?</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Environment management · Lesson 0002</div>
+    <h1>Who loads <code>.env</code>?</h1>
+    <p class="lede">Bun and npm look similar at the command line, but they do not make the same promise.</p>
+    <p class="meta">Target time: 7 minutes · Builds on <a href="0001-the-process-boundary.html">the process boundary</a></p>
+  </header>
+
+  <section>
+    <h2>A file cannot export itself</h2>
+    <p>Suppose your project contains:</p>
+    <pre><code># .env
+API_URL=https://api.example</code></pre>
+    <p>That file changes nothing until a loader reads it. A loader parses the file and puts values into a process environment. Your shell, runtime, framework, or deployment tool may be the loader—but you must identify which one.</p>
+
+    <div class="rule">
+      <strong>Debugging rule:</strong> do not ask “Does this project support <code>.env</code>?” Ask “Which exact process loads this file, and what child processes inherit the result?”
+    </div>
+  </section>
+
+  <section>
+    <h2>Bun loads; npm launches</h2>
+    <table>
+      <thead><tr><th>Command</th><th>Who handles `.env`?</th></tr></thead>
+      <tbody>
+        <tr><td><code>bun app.ts</code></td><td>Bun automatically loads its supported dotenv files.</td></tr>
+        <tr><td><code>bun run start</code></td><td>Bun loads dotenv, then starts the package script with those values.</td></tr>
+        <tr><td><code>npm run start</code></td><td>npm provides a script environment, but does not document automatic dotenv loading.</td></tr>
+        <tr><td><code>node --env-file=.env app.js</code></td><td>Node explicitly loads the named file.</td></tr>
+      </tbody>
+    </table>
+    <p>The <a href="https://bun.com/docs/runtime/environment-variables">Bun documentation</a> explicitly promises automatic loading. The <a href="https://docs.npmjs.com/cli/v11/using-npm/scripts/#environment">npm scripts documentation</a> lists the environment npm creates but makes no automatic dotenv promise. Modern Node offers an explicit <a href="https://nodejs.org/api/environment_variables.html"><code>--env-file</code> mechanism</a>.</p>
+
+    <div class="callout warning">
+      <strong>Do not overgeneralize:</strong> <code>npm run dev</code> may still appear to load <code>.env</code> when the script starts Vite, Next.js, Bun, or another tool that performs the loading. npm is then the launcher, not the loader.
+    </div>
+  </section>
+
+  <section>
+    <h2>Follow the process chain</h2>
+    <p>Given this package script:</p>
+    <pre><code>{
+  "scripts": {
+    "start:node": "node app.js",
+    "start:bun": "bun app.ts"
+  }
+}</code></pre>
+
+    <p><code>npm run start:node</code> creates this chain:</p>
+    <div class="process" aria-label="npm starts a shell which starts Node">
+      <div><strong>npm</strong><br>does not load `.env`</div>
+      <span class="arrow" aria-hidden="true">→</span>
+      <div><strong>Node</strong><br>no explicit loader</div>
+    </div>
+
+    <p><code>npm run start:bun</code> creates a different ending:</p>
+    <div class="process" aria-label="npm starts a shell which starts Bun">
+      <div><strong>npm</strong><br>does not load `.env`</div>
+      <span class="arrow" aria-hidden="true">→</span>
+      <div><strong>Bun</strong><br>loads `.env`</div>
+    </div>
+    <p>Once Bun loads the value, code inside Bun reads it through <code>process.env.API_URL</code>, <code>Bun.env.API_URL</code>, or <code>import.meta.env.API_URL</code>. Bun documents these as aliases.</p>
+  </section>
+
+  <section>
+    <h2>Turn Bun's loader off deliberately</h2>
+    <pre><code>bun run --no-env-file app.ts</code></pre>
+    <p>Use <code>--no-env-file</code> in CI/CD or production when the platform is the authority and you want Bun to rely only on the process environment. Bun also supports an explicit file:</p>
+    <pre><code>bun --env-file=.env.staging app.ts</code></pre>
+    <p>These flags are defined in Bun's <a href="https://bun.com/docs/runtime/environment-variables#manually-specifying-env-files">environment-variable documentation</a>.</p>
+  </section>
+
+  <section>
+    <h2>Retrieval check</h2>
+    <p>Assume plain commands with no framework. Each answer has two words and thirteen characters.</p>
+
+    <div class="quiz" data-quiz data-success="Correct — Bun is the dotenv loader." data-failure="Not yet — identify the runtime that reads the file.">
+      <p>A project has <code>API_URL=example</code> in <code>.env</code>, then runs <code>bun app.ts</code>.</p>
+      <div class="choices">
+        <button type="button" data-correct="true">Value appears</button>
+        <button type="button" data-correct="false">Value missing</button>
+      </div>
+      <p class="feedback" aria-live="polite"></p>
+    </div>
+
+    <div class="quiz" data-quiz data-success="Correct — neither npm nor plain Node loaded the file." data-failure="Not yet — npm launching a script is not dotenv loading.">
+      <p>The same project runs <code>npm run start:node</code> from the script above.</p>
+      <div class="choices">
+        <button type="button" data-correct="false">Value appears</button>
+        <button type="button" data-correct="true">Value missing</button>
+      </div>
+      <p class="feedback" aria-live="polite"></p>
+    </div>
+
+    <div class="quiz" data-quiz data-success="Correct — Bun loads the file even though npm launched Bun." data-failure="Not yet — follow the chain to its actual runtime.">
+      <p>The same project runs <code>npm run start:bun</code> from the script above.</p>
+      <div class="choices">
+        <button type="button" data-correct="true">Value appears</button>
+        <button type="button" data-correct="false">Value missing</button>
+      </div>
+      <p class="feedback" aria-live="polite"></p>
+    </div>
+
+    <div class="quiz" data-quiz data-success="Correct — the flag disables Bun's automatic loader." data-failure="Not yet — read the command-line flag literally.">
+      <p>The project runs <code>bun run --no-env-file app.ts</code>.</p>
+      <div class="choices">
+        <button type="button" data-correct="false">Value appears</button>
+        <button type="button" data-correct="true">Value missing</button>
+      </div>
+      <p class="feedback" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Keep nearby</h2>
+    <p>Use the printable <a href="../reference/0002-dotenv-loader-matrix.html">dotenv loader matrix</a> to identify loader ownership.</p>
+    <p><strong>Primary reading:</strong> Bun's concise <a href="https://bun.com/docs/runtime/environment-variables">environment variables guide</a>.</p>
+  </section>
+
+  <footer>
+    <p>Answer the four checks from memory and explain who the loader is. Ask your teacher any follow-up question before moving to file precedence.</p>
+  </footer>
+</main>
+</body>
+</html>

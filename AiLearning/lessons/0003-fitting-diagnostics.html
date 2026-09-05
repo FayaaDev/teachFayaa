@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 3: Read Training and Validation Results</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="../sessions/02-supervised-learning-algorithms/SESSION.md">Session folder</a><a href="0002-decision-boundary-and-cost.html">Lesson 2</a><a href="../reference/session-02-algorithm-selection.html">Algorithm reference</a></nav>
+  <p class="eyebrow">Session 02 follow-up · 10 minutes · D1</p>
+  <h1>Read the gap, not one number</h1>
+  <p class="dek">Your tangible win: diagnose a model from training and validation results without treating accuracy as a verdict.</p>
+
+  <h2>What the two numbers mean</h2>
+  <p><strong>Training accuracy</strong> is the fraction of correct predictions on examples used to fit the model. <strong>Validation accuracy</strong> is the fraction correct on held-out examples that were not used to fit it. Validation performance estimates how the model may generalize to new, similar data.</p>
+  <div class="rule"><strong>Accuracy = correct predictions ÷ all predictions.</strong> It is useful only when the validation set represents the deployment population and the cost of mistakes and class balance do not make accuracy misleading.</div>
+
+  <table>
+    <thead><tr><th>Training</th><th>Validation</th><th>First interpretation</th></tr></thead>
+    <tbody>
+      <tr><td>97%</td><td>78%</td><td>Large gap: the model learned training-specific patterns. Suspect <strong>overfitting</strong> (high variance).</td></tr>
+      <tr><td>62%</td><td>61%</td><td>Both weak and close: the model cannot express enough useful pattern. Suspect <strong>underfitting</strong> (high bias).</td></tr>
+      <tr><td>91%</td><td>89%</td><td>Small gap and strong validation result: promising, subject to the correct metric, baseline, and operational requirements.</td></tr>
+    </tbody>
+  </table>
+  <p>There is no universal “bad gap” or “good accuracy.” Compare against a baseline, the business cost of false positives versus false negatives, and the performance needed in production. A fraud detector that is 99% accurate can still be useless if it misses nearly all rare fraud.</p>
+
+  <h2>Underfitting versus overfitting</h2>
+  <table>
+    <thead><tr><th></th><th>Underfitting</th><th>Overfitting</th></tr></thead>
+    <tbody>
+      <tr><td>Model behaviour</td><td>Too simple to learn the important signal.</td><td>Fits training noise or accidental detail.</td></tr>
+      <tr><td>Typical numbers</td><td>Training and validation both poor, with a small gap.</td><td>Training very strong; validation much weaker.</td></tr>
+      <tr><td>Useful next move</td><td>Add credible features, increase model capacity, or reduce excessive regularization.</td><td>Get more representative data, simplify/regularize, limit tree depth, or use an appropriate ensemble.</td></tr>
+    </tbody>
+  </table>
+  <p>These are hypotheses, not automatic conclusions. First check that the data split is valid and no leakage, distribution shift, or label error is distorting the comparison.</p>
+
+  <h2>What is a decision tree?</h2>
+  <p>A <strong>decision tree</strong> is a supervised model that predicts through a chain of simple feature tests. For example: <em>amount &gt; 4,000 SAR?</em> → yes; <em>new device?</em> → yes; → <em>review</em>. Each internal node tests a feature; each leaf returns a class or numeric prediction.</p>
+  <p>It can represent threshold-like and interacting rules, and its individual paths are easy to inspect. A deep single tree can be unstable: small changes in training data may produce a very different tree. That is why random forests use many randomized trees and average them.</p>
+  <p>Source: <a href="https://scikit-learn.org/stable/modules/tree.html">scikit-learn’s Decision Trees guide</a> describes trees as supervised classification/regression models that learn simple decision rules and notes their instability; its <a href="https://scikit-learn.org/stable/modules/ensemble.html">Ensemble guide</a> explains bagging and boosting.</p>
+
+  <h2>Bagging and boosting</h2>
+  <table>
+    <thead><tr><th></th><th>Bagging</th><th>Boosting</th></tr></thead>
+    <tbody>
+      <tr><td>Definition</td><td>Train multiple versions of a base model independently on randomized samples, then aggregate their predictions.</td><td>Train weak models sequentially; each later model emphasizes errors made earlier, then combine them.</td></tr>
+      <tr><td>Main use</td><td>Reduce variance and stabilize an overfit-prone learner, especially deep trees.</td><td>Build a more accurate model from many simple learners when sequential training and careful tuning are acceptable.</td></tr>
+      <tr><td>Tree example</td><td>Random forest: bootstrap samples + feature randomness + averaged/voted trees.</td><td>Gradient boosting: a new small tree learns what the current ensemble still gets wrong.</td></tr>
+      <tr><td>Memory test</td><td><strong>Independent → aggregate → variance.</strong></td><td><strong>Sequential → correct → residual error.</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><strong>When should you use which?</strong> Start with a single, interpretable tree if a rule path is required. Use bagging/random forest when a deep tree’s validation gap indicates instability. Consider boosting when you need stronger predictive performance and can validate/tune carefully. Do not choose an ensemble before confirming the target, data quality, metric, and latency budget.</div>
+
+  <h2>Closed-book check</h2>
+  <p>Answer before reopening the tables. Each question locks after one choice.</p>
+
+  <section class="quiz" data-quiz data-answer="Overfit!" data-explanation="Training accuracy is much stronger than validation accuracy. The model learned patterns that do not generalize well, so overfitting (high variance) is the first hypothesis.">
+    <strong>A model scores 98% training accuracy and 74% validation accuracy on representative data. Which diagnosis is strongest?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Overfit!">Overfit!</button>
+      <button class="quiz-option" data-value="Underfit">Underfit</button>
+      <button class="quiz-option" data-value="Balanced">Balanced</button>
+      <button class="quiz-option" data-value="Mismatch">Mismatch</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz data-answer="Parallel" data-explanation="Bagging builds learners independently on randomized subsets and aggregates them. Boosting is the sequential mechanism.">
+    <strong>Which word identifies bagging’s construction mechanism?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Parallel">Parallel</button>
+      <button class="quiz-option" data-value="Sequence">Sequence</button>
+      <button class="quiz-option" data-value="Averaged">Averaged</button>
+      <button class="quiz-option" data-value="Residual">Residual</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz data-answer="Underfit" data-explanation="Both results are weak and nearly equal. The model has not learned enough signal even from its training data, which suggests underfitting (high bias).">
+    <strong>A simple model scores 60% training accuracy and 59% validation accuracy, below the required baseline. Which diagnosis is strongest?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Overfit!">Overfit!</button>
+      <button class="quiz-option" data-value="Underfit">Underfit</button>
+      <button class="quiz-option" data-value="Balanced">Balanced</button>
+      <button class="quiz-option" data-value="Mismatch">Mismatch</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>Transfer prompt</h2>
+  <p>A single decision tree reaches 96% training accuracy and 80% validation accuracy. A random forest reaches 93% training accuracy and 88% validation accuracy within the latency budget. Which would you propose for deployment, and what property of bagging explains the change?</p>
+
+  <div class="callout">Ask me follow-up questions about any row or number. When ready, send your transfer-prompt answer and say <strong>“quiz me on fitting diagnostics”</strong>.</div>
+</main>
+</body>
+</html>

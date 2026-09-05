@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 1: Find the Supervisory Signal</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="../sessions/01-learning-paradigms-and-framing/SESSION.md">Session folder</a><a href="../reference/session-01-glossary.html">Glossary</a><a href="../reference/exam-map.html">Exam map</a></nav>
+  <p class="eyebrow">Session 01 · 12 minutes · D1</p>
+  <h1>Find the signal, then name the paradigm</h1>
+  <p class="dek">Your tangible win: classify an unfamiliar learning setup without memorizing five isolated definitions.</p>
+
+  <h2>One deciding question</h2>
+  <p>When a scenario asks for the learning paradigm, ignore the model name and ask:</p>
+  <div class="rule"><strong>Where does the correction signal come from?</strong></div>
+
+  <table>
+    <thead><tr><th>Signal source</th><th>Paradigm</th></tr></thead>
+    <tbody>
+      <tr><td>Human-provided target for each labeled example</td><td>Supervised</td></tr>
+      <tr><td>Few labeled examples plus many unlabeled examples</td><td>Semi-supervised</td></tr>
+      <tr><td>Target automatically derived from each example</td><td>Self-supervised</td></tr>
+      <tr><td>No target; structure alone</td><td>Unsupervised</td></tr>
+      <tr><td>Cumulative reward from an environment</td><td>Reinforcement</td></tr>
+    </tbody>
+  </table>
+
+  <h2>The Expert-level distinction</h2>
+  <p>“Unlabeled data” does not automatically mean unsupervised learning. Masking a token and predicting it creates a definite target from the example itself. That is <strong>self-supervised</strong>. Unsupervised learning has no per-example target at all.</p>
+
+  <h2>Closed-book check</h2>
+  <p>Answer before reopening the table. Each question locks after one choice.</p>
+
+  <section class="quiz" data-quiz data-answer="Self-supervised" data-explanation="Every report supplies its own target: the hidden token. No human labels are required, but a target and loss still exist.">
+    <strong>An Arabic medical model masks words in raw clinical reports and learns to recover them. Which paradigm?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Supervised">Supervised</button>
+      <button class="quiz-option" data-value="Unsupervised">Unsupervised</button>
+      <button class="quiz-option" data-value="Self-supervised">Self-supervised</button>
+      <button class="quiz-option" data-value="Reinforcement">Reinforcement</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz data-answer="Unsupervised" data-explanation="There is no target for any customer; the algorithm is discovering structure in a chosen similarity space.">
+    <strong>A retailer groups customers by behavior without predefined segment labels. Which paradigm?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Supervised">Supervised</button>
+      <button class="quiz-option" data-value="Unsupervised">Unsupervised</button>
+      <button class="quiz-option" data-value="Self-supervised">Self-supervised</button>
+      <button class="quiz-option" data-value="Reinforcement">Reinforcement</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz data-answer="Reinforcement" data-explanation="Actions change future states, and the objective is cumulative reward across the whole shift rather than a labeled correct action at each step.">
+    <strong>A warehouse crane experiments in simulation to minimize total energy over a shift. Which paradigm?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Supervised">Supervised</button>
+      <button class="quiz-option" data-value="Unsupervised">Unsupervised</button>
+      <button class="quiz-option" data-value="Self-supervised">Self-supervised</button>
+      <button class="quiz-option" data-value="Reinforcement">Reinforcement</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>Transfer prompt</h2>
+  <p>Without looking back, classify this case and state the signal source in one sentence: <em>1,200 radiologist-labeled images and 40,000 unlabeled images from the same hospital.</em> Bring your answer to me; I will evaluate the reasoning, not only the label.</p>
+
+  <h2>Primary source</h2>
+  <p>Read <a href="https://developers.google.com/machine-learning/problem-framing">Google's Introduction to Machine Learning Problem Framing</a>, especially the section on deciding whether ML is appropriate. It is an official, short, high-trust source. For deeper production context, use <a href="https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/ch02.html">Chapter 2 of Chip Huyen's <cite>Designing Machine Learning Systems</cite></a>.</p>
+
+  <div class="callout">Ask me follow-up questions about any distinction that remains unclear. When ready, send your transfer-prompt answer and say <strong>“quiz me on Session 1”</strong>.</div>
+</main>
+</body>
+</html>

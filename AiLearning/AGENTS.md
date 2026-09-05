@@ -1,0 +1,1 @@
+This space is meant for studying the AI badge exam. Always speak in English. The exam is in English. 

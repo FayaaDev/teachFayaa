@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 5: Find Groups Without Answers</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="../sessions/03-unsupervised-learning-and-features/SESSION.md">Session folder</a><a href="0004-margin-and-neighborhood.html">Lesson 4</a><a href="../reference/session-02-algorithm-selection.html">Session 2 reference</a></nav>
+  <p class="eyebrow">Session 03 · 10 minutes · D2</p>
+  <h1>Find groups when nobody supplied the answers</h1>
+  <p class="dek">Your tangible win: tell clustering from classification, then make a first safe choice between k-means and DBSCAN.</p>
+
+  <h2>Classification has answers; clustering looks for them</h2>
+  <p>In <strong>classification</strong>, the training data already has a label. For example, past transactions say <em>fraud</em> or <em>not fraud</em>. The model learns to predict that known answer.</p>
+  <p>In <strong>clustering</strong>, there are no given group labels. You give the model data about customers—such as visits, spending, and products—and ask it to discover groups whose members look similar.</p>
+  <div class="rule"><strong>Memory rule:</strong> known answer → classification. No answer, find groups → clustering.</div>
+
+  <h2>k-means: make a chosen number of groups</h2>
+  <p><strong>k-means</strong> asks you to choose the number of groups, called <strong>k</strong>, before it starts. It repeatedly places a center in each group and moves people to the nearest center.</p>
+  <p>It is a reasonable first candidate when you expect groups that are roughly round and similarly spread out. It is not a good match for long, curved, or unusually shaped groups.</p>
+  <p>Example: A retailer chooses <em>k = 3</em> and finds three broad customer groups: low, medium, and high spending. Those names are a human interpretation after clustering—not labels the algorithm received.</p>
+
+  <h2>DBSCAN: find crowded areas and ignore noise</h2>
+  <p><strong>DBSCAN</strong> looks for crowded areas. Points with enough close neighbours form a group. A point far from every crowded area can be marked as <strong>noise</strong>, meaning it does not belong to a discovered group.</p>
+  <p>Unlike k-means, DBSCAN does not require you to state the number of groups first. It can also find curved or irregularly shaped groups. However, you must choose what counts as “close” and “crowded,” and it can struggle when groups have very different densities.</p>
+
+  <table>
+    <thead><tr><th>If the situation says…</th><th>First thought</th></tr></thead>
+    <tbody>
+      <tr><td>“We know fraud or not fraud for old cases.”</td><td>Classification, not clustering.</td></tr>
+      <tr><td>“Create 4 broad, round customer segments.”</td><td>Try k-means; it needs <em>k = 4</em>.</td></tr>
+      <tr><td>“Find unusual GPS clusters and leave isolated points out.”</td><td>Consider DBSCAN; it can mark noise.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><strong>Important:</strong> a cluster is a pattern in the data, not automatically a meaningful business segment. Inspect the groups, give them understandable descriptions, and test whether an action based on them is useful.</div>
+
+  <h2>Closed-book check</h2>
+  <p>Answer before reopening the explanations. Each question locks after one choice.</p>
+
+  <section class="quiz" data-quiz data-answer="NoLabel" data-explanation="Clustering starts without supplied group labels. It discovers groups from similarity in the input data.">
+    <strong>A company has customer behavior data but no existing customer-group names. Which cue suggests clustering?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="NoLabel">NoLabel</button>
+      <button class="quiz-option" data-value="Labels!">Labels!</button>
+      <button class="quiz-option" data-value="Targets">Targets</button>
+      <button class="quiz-option" data-value="Classes">Classes</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz data-answer="Centres" data-explanation="k-means uses centers and assigns points to their nearest center. You choose the number of groups, k, before fitting it.">
+    <strong>Which word best identifies k-means?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Centres">Centres</button>
+      <button class="quiz-option" data-value="Density!">Density!</button>
+      <button class="quiz-option" data-value="Nearest">Nearest</button>
+      <button class="quiz-option" data-value="Margins">Margins</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz data-answer="Density" data-explanation="DBSCAN finds high-density areas and can label isolated points as noise. It does not need the number of clusters in advance.">
+    <strong>Which word best identifies DBSCAN?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Density">Density</button>
+      <button class="quiz-option" data-value="Centres">Centres</button>
+      <button class="quiz-option" data-value="Bagging">Bagging</button>
+      <button class="quiz-option" data-value="Scaling">Scaling</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>Transfer prompt</h2>
+  <p>You have location data from delivery drivers. There are no route-type labels. You want to discover areas with many drivers and flag isolated driver locations. Would you begin with k-means or DBSCAN? Give one reason.</p>
+
+  <h2>Primary source</h2>
+  <p>Read scikit-learn’s <a href="https://scikit-learn.org/stable/modules/clustering.html">Clustering guide</a>. Its comparison table explains that k-means suits broadly even, flat groups while DBSCAN can find irregular shapes and remove outliers as noise.</p>
+
+  <div class="callout">Ask me to simplify any term. When ready, answer the transfer prompt, or say <strong>“quiz me on clustering”</strong>.</div>
+</main>
+</body>
+</html>

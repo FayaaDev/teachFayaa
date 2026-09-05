@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 4: Margins and Neighborhoods</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="../sessions/02-supervised-learning-algorithms/SESSION.md">Session folder</a><a href="0003-fitting-diagnostics.html">Lesson 3</a><a href="../reference/session-02-algorithm-selection.html">Algorithm reference</a></nav>
+  <p class="eyebrow">Session 02 completion · 10 minutes · D1</p>
+  <h1>Margins are learned; neighbors are stored</h1>
+  <p class="dek">Your tangible win: reject an attractive model when its prediction mechanism conflicts with the production constraint.</p>
+
+  <h2>Support vector machines: choose a separating boundary</h2>
+  <p>A <strong>support vector machine (SVM)</strong> classifies by choosing a decision boundary with the largest possible <strong>margin</strong>: the distance from that boundary to the closest training examples on either side. Those closest examples are the <strong>support vectors</strong>; they are especially influential in positioning the boundary.</p>
+  <p>For data that is not linearly separable, a <strong>kernel</strong> can represent a nonlinear boundary without explicitly constructing every transformed feature. This flexibility is not free: kernel SVMs can be costly to train and tune as data volume grows. Feature scaling also matters because distance and margin calculations depend on feature magnitude.</p>
+  <div class="rule"><strong>Exam cue:</strong> “maximum separation from the closest points” identifies a margin-based SVM. “Closest stored examples vote” identifies k-NN.</div>
+
+  <h2>k-nearest neighbors: defer the work until prediction</h2>
+  <p><strong>k-nearest neighbors (k-NN)</strong> stores labelled training examples. For a new case, it finds the <em>k</em> closest examples under a distance measure, then uses their vote for classification or their average for regression.</p>
+  <table>
+    <thead><tr><th>Choice</th><th>Effect</th><th>Risk</th></tr></thead>
+    <tbody>
+      <tr><td>Small <em>k</em></td><td>Very local, flexible boundary.</td><td>Sensitive to noise: higher variance.</td></tr>
+      <tr><td>Large <em>k</em></td><td>Smoother, more stable decision.</td><td>May erase useful local structure: higher bias.</td></tr>
+      <tr><td>Unscaled features</td><td>Large-unit features dominate distance.</td><td>“Nearest” may no longer mean similar.</td></tr>
+    </tbody>
+  </table>
+  <p>k-NN has little conventional fitting work, but a naïve implementation compares each new case with many stored cases. It is therefore often a poor starting point when online latency is strict or the reference data is large. Validate both its quality and its actual serving latency.</p>
+
+  <h2>Use mechanism before reputation</h2>
+  <table>
+    <thead><tr><th>Question</th><th>SVM</th><th>k-NN</th></tr></thead>
+    <tbody>
+      <tr><td>What determines a prediction?</td><td>A learned boundary, influenced by support vectors.</td><td>The labels or values of nearby stored examples.</td></tr>
+      <tr><td>Where is more work paid?</td><td>Usually training and tuning.</td><td>Usually prediction-time distance search.</td></tr>
+      <tr><td>What is essential?</td><td>Appropriate kernel/regularization and scaled features.</td><td>Meaningful distance, scaled features, and a justified <em>k</em>.</td></tr>
+      <tr><td>Immediate production concern</td><td>Training scalability and limited per-decision explanation.</td><td>Serving latency, memory, and sensitivity to irrelevant dimensions.</td></tr>
+    </tbody>
+  </table>
+  <p>Neither family wins by name alone. First establish a simple credible baseline, then use representative validation data and the governing constraint—such as latency, explanation, scale, or error cost—to decide whether a more complex candidate earns its place.</p>
+
+  <h2>Closed-book check</h2>
+  <p>Answer before reopening the tables. Each question locks after one choice.</p>
+
+  <section class="quiz" data-quiz data-answer="Margin" data-explanation="An SVM chooses a boundary with the greatest separation from the closest training examples. Those examples are its support vectors.">
+    <strong>A classifier is defined by maximizing the distance between its boundary and its closest examples. Which cue identifies its mechanism?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Margin">Margin</button>
+      <button class="quiz-option" data-value="Forest">Forest</button>
+      <button class="quiz-option" data-value="Linear">Linear</button>
+      <button class="quiz-option" data-value="Bagged">Bagged</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz data-answer="Nearest" data-explanation="k-NN predicts from nearby stored examples. Its work occurs at serving time, so a strict latency budget and a large reference set are important constraints.">
+    <strong>A model stores every labelled case, then compares a new case with them at request time. Which word identifies the mechanism?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Nearest">Nearest</button>
+      <button class="quiz-option" data-value="Kernel!">Kernel!</button>
+      <button class="quiz-option" data-value="Boosted">Boosted</button>
+      <button class="quiz-option" data-value="Treeish">Treeish</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz data-answer="Scaling" data-explanation="k-NN uses distances. Without scaling, a feature measured in a large unit can dominate the distance even when it is not the most important feature.">
+    <strong>In a k-NN fraud model, transaction amount ranges to 100,000 while device-risk score ranges from 0 to 1. What must be checked first?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Scaling">Scaling</button>
+      <button class="quiz-option" data-value="Bagging">Bagging</button>
+      <button class="quiz-option" data-value="Ranking">Ranking</button>
+      <button class="quiz-option" data-value="Targets">Targets</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>Transfer prompt</h2>
+  <p>A retailer has 20 million labelled customer records and must classify a checkout request in under 15 ms. A teammate proposes k-NN because it is easy to understand. What concern would you raise from its prediction mechanism, and what validation evidence would you require before accepting or rejecting it?</p>
+
+  <h2>Primary source</h2>
+  <p>Read scikit-learn’s <a href="https://scikit-learn.org/stable/modules/svm.html">Support Vector Machines</a> guide, then its <a href="https://scikit-learn.org/stable/modules/neighbors.html">Neighbors-based Classification</a> guide. Return to the <a href="../reference/session-02-algorithm-selection.html">Session 2 algorithm-selection reference</a> for the complete comparison.</p>
+
+  <div class="callout">Ask me about any trade-off. When ready, answer the transfer prompt and say <strong>“quiz me on Session 2”</strong>. I will then give you a closed-book, mixed scenario quiz and record the results for spaced review.</div>
+</main>
+</body>
+</html>

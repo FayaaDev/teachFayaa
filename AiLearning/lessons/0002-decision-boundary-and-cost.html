@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 2: Choose a Decision Boundary</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="../sessions/02-supervised-learning-algorithms/SESSION.md">Session folder</a><a href="0001-supervisory-signal.html">Lesson 1</a><a href="../reference/session-02-algorithm-selection.html">Algorithm reference</a><a href="../reference/session-01-glossary.html">Session 1 glossary</a></nav>
+  <p class="eyebrow">Session 02 · 12 minutes · D1</p>
+  <h1>Choose the shape, then count the cost</h1>
+  <p class="dek">Your tangible win: defend a supervised-model family by naming the target, the relationship shape, and the operational constraint.</p>
+
+  <h2>The three-question filter</h2>
+  <ol>
+    <li><strong>What is the target?</strong> A continuous amount calls for regression; a category calls for classification.</li>
+    <li><strong>What shape must the model express?</strong> An additive global pattern supports a linear baseline. Many “if feature crosses threshold” interactions support trees.</li>
+    <li><strong>What constraint governs?</strong> Explainability, prediction latency, training time, memory, and scale can eliminate a technically capable family.</li>
+  </ol>
+  <div class="rule"><strong>Expert move:</strong> do not select the most flexible model by default. Start with the simplest credible baseline, then add flexibility only when validation evidence and the operating constraints justify it.</div>
+
+  <h2>Two ensembles, opposite mechanisms</h2>
+  <table>
+    <thead><tr><th></th><th>Bagging / random forest</th><th>Boosting</th></tr></thead>
+    <tbody>
+      <tr><td>Construction</td><td>Many learners built independently on randomized samples/features.</td><td>Learners built in sequence; later learners focus on prior errors.</td></tr>
+      <tr><td>Main effect</td><td>Aggregate diverse predictions to reduce variance.</td><td>Combine weak learners to reduce systematic error.</td></tr>
+      <tr><td>Memory cue</td><td><strong>B</strong>ag = learners in separate bags.</td><td><strong>B</strong>oost = each learner gets a boost from the prior miss.</td></tr>
+    </tbody>
+  </table>
+  <p>Both can use trees. “Uses trees” is therefore not enough to identify the method. The construction mechanism is the deciding evidence. <a href="https://scikit-learn.org/stable/modules/ensemble.html">scikit-learn’s ensemble guide</a> describes bagging as randomized subsets aggregated to reduce variance, and boosting as sequential weak learners that focus on missed examples.</p>
+
+  <h2>Closed-book check</h2>
+  <p>Answer before reopening the table. Each question locks after one choice.</p>
+
+  <section class="quiz" data-quiz data-answer="Linear" data-explanation="The target is a continuous amount. An additive linear model is the simplest credible baseline; evaluate it before adding flexible families.">
+    <strong>A utility predicts next month’s electricity consumption in kWh from temperature, floor area, and occupancy. Which first family is most defensible?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Linear">Linear</button>
+      <button class="quiz-option" data-value="Forest">Forest</button>
+      <button class="quiz-option" data-value="Boost!">Boost!</button>
+      <button class="quiz-option" data-value="Kernel">Kernel</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz data-answer="Parallel" data-explanation="Bagging trains learners independently on randomized subsets and aggregates them. That mechanism mainly reduces variance for unstable learners such as deep trees.">
+    <strong>A team trains many deep trees independently on bootstrap samples and averages their outputs. Which mechanism is this?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Parallel">Parallel</button>
+      <button class="quiz-option" data-value="Sequence">Sequence</button>
+      <button class="quiz-option" data-value="Residual">Residual</button>
+      <button class="quiz-option" data-value="Decision">Decision</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz data-answer="Variance" data-explanation="Near-perfect training performance with substantially worse validation performance is the signature of overfitting, which is high variance. More data, regularization, simpler trees, or bagging may help depending on the context.">
+    <strong>A deep tree has 99% training accuracy but 71% validation accuracy. Which failure dominates?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Variance">Variance</button>
+      <button class="quiz-option" data-value="Decision">Decision</button>
+      <button class="quiz-option" data-value="Residual">Residual</button>
+      <button class="quiz-option" data-value="Parallel">Parallel</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>Transfer prompt</h2>
+  <p>A bank must classify card transactions as <em>review</em> or <em>clear</em>. Analysts require a reason for each individual decision, and online scoring has a 10 ms budget. Which family would you begin with, and which two constraints support that choice? Include one sentence explaining why you would not start with k-NN.</p>
+
+  <h2>Primary source</h2>
+  <p>Read Google’s <a href="https://developers.google.com/machine-learning/crash-course/logistic-regression">Logistic Regression</a> module, then use the <a href="https://scikit-learn.org/stable/modules/ensemble.html">scikit-learn Ensemble Methods</a> guide to contrast bagging with boosting. The complete decision aid is in your <a href="../reference/session-02-algorithm-selection.html">Session 2 algorithm-selection reference</a>.</p>
+
+  <div class="callout">Ask me follow-up questions about any model family or trade-off. When ready, send your transfer-prompt answer and say <strong>“quiz me on Session 2”</strong>.</div>
+</main>
+</body>
+</html>

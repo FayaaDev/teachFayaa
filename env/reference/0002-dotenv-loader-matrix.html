@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dotenv Loader Matrix</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Quick reference · 0002</div>
+    <h1>Dotenv loader matrix</h1>
+    <p class="lede">Identify which component turns a text file into process variables.</p>
+  </header>
+
+  <table>
+    <thead><tr><th>Invocation</th><th>Automatic dotenv?</th><th>Authority</th></tr></thead>
+    <tbody>
+      <tr><td><code>bun app.ts</code></td><td>Yes</td><td>Bun</td></tr>
+      <tr><td><code>bun run script</code></td><td>Yes</td><td>Bun</td></tr>
+      <tr><td><code>bun --env-file=FILE app.ts</code></td><td>Explicit file</td><td>Bun</td></tr>
+      <tr><td><code>bun run --no-env-file app.ts</code></td><td>No</td><td>Parent process/platform</td></tr>
+      <tr><td><code>npm run script</code></td><td>Not by npm</td><td>Whatever the script starts</td></tr>
+      <tr><td><code>node app.js</code></td><td>No</td><td>Parent process</td></tr>
+      <tr><td><code>node --env-file=FILE app.js</code></td><td>Explicit file</td><td>Node</td></tr>
+      <tr><td><code>source FILE</code></td><td>Executes shell syntax</td><td>Current shell</td></tr>
+    </tbody>
+  </table>
+
+  <div class="rule">
+    <strong>Trace:</strong> file → loader → process environment → child process. If you cannot name each arrow, you cannot reliably predict the value.
+  </div>
+
+  <h2>Production default</h2>
+  <p>Prefer platform-injected variables or secrets in CI/CD, containers, and Cloudflare. When using Bun, consider <code>--no-env-file</code> so an accidentally copied dotenv file cannot silently become another configuration source.</p>
+
+  <h2>Important caveat</h2>
+  <p>Frameworks and deployment tools may implement their own file names and precedence. npm not loading dotenv itself does not mean a command launched by npm cannot load dotenv.</p>
+
+  <footer>
+    <p>Return to <a href="../lessons/0002-who-loads-dotenv.html">Lesson 0002: Who loads dotenv?</a> · Review <a href="0001-process-environment-cheat-sheet.html">process environments</a>.</p>
+  </footer>
+</main>
+</body>
+</html>

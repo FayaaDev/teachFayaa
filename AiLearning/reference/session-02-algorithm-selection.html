@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Session 2 Algorithm Selection</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+  <nav><a href="../lessons/0001-supervisory-signal.html">Lesson 1</a><a href="../lessons/0002-decision-boundary-and-cost.html">Lesson 2</a><a href="session-01-glossary.html">Session 1 glossary</a><a href="exam-map.html">Exam map</a></nav>
+  <p class="eyebrow">Quick Reference · Session 02</p>
+  <h1>Supervised algorithm selection</h1>
+  <p class="dek">Choose the target type first. Then choose the simplest family that can express the relationship and satisfy the operational constraints.</p>
+
+  <table>
+    <thead><tr><th>Family</th><th>Use when</th><th>Core caution</th></tr></thead>
+    <tbody>
+      <tr><td>Linear regression</td><td>The target is a continuous number and an additive linear relationship is a credible baseline.</td><td>“Linear” describes the model in its features; engineered features can still represent curvature.</td></tr>
+      <tr><td>Logistic regression</td><td>The target is a class and a fast, inspectable probability baseline is useful.</td><td>The output is a probability; a decision threshold converts it into a class.</td></tr>
+      <tr><td>Decision tree</td><td>Threshold-like, rule-shaped interactions matter and an individual prediction must be explainable as a path.</td><td>A single deep tree has high variance: small data changes can yield a different tree.</td></tr>
+      <tr><td>Random forest / bagging</td><td>A strong, variable base learner such as a deep tree overfits and robustness matters.</td><td>Train diverse learners on random subsets, then aggregate. It primarily reduces variance.</td></tr>
+      <tr><td>Boosted trees</td><td>A sequence of simple learners can improve residual errors and prediction quality justifies tuning.</td><td>Learners depend on earlier learners; training and tuning are less parallel and need careful validation.</td></tr>
+      <tr><td>SVM / k-NN</td><td>The geometry is appropriate: margins for SVM; useful local neighbours for k-NN.</td><td>SVM kernels and k-NN prediction can become costly at scale; feature scale matters.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Retrieval rules</h2>
+  <div class="rule"><strong>Target first:</strong> continuous number → regression; category → classification. The algorithm name never determines the problem type.</div>
+  <div class="rule"><strong>Mechanism, not nickname:</strong> bagging = independent random subsets + aggregate; boosting = sequential correction of earlier errors.</div>
+  <div class="rule"><strong>Diagnostic:</strong> high training error and high validation error suggests high bias; low training error but much worse validation error suggests high variance.</div>
+
+  <p class="small">Sources: <a href="https://developers.google.com/machine-learning/crash-course/linear-regression">Google: Linear Regression</a>, <a href="https://developers.google.com/machine-learning/crash-course/logistic-regression">Google: Logistic Regression</a>, <a href="https://scikit-learn.org/stable/modules/tree.html">scikit-learn: Decision Trees</a>, and <a href="https://scikit-learn.org/stable/modules/ensemble.html">scikit-learn: Ensembles</a>.</p>
+</main>
+</body>
+</html>

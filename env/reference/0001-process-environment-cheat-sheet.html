@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Process Environment Cheat Sheet</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Quick reference · 0001</div>
+    <h1>Process environments</h1>
+    <p class="lede">Bash and Zsh commands for controlling what a child process receives.</p>
+  </header>
+
+  <table>
+    <thead><tr><th>Intent</th><th>Command</th><th>Scope</th></tr></thead>
+    <tbody>
+      <tr><td>Shell variable</td><td><code>KEY=value</code></td><td>Current shell only</td></tr>
+      <tr><td>Export now</td><td><code>export KEY=value</code></td><td>Current shell and future children</td></tr>
+      <tr><td>Export existing</td><td><code>export KEY</code></td><td>Future children receive current value</td></tr>
+      <tr><td>One command</td><td><code>KEY=value command</code></td><td>That command and its children</td></tr>
+      <tr><td>Remove value</td><td><code>unset KEY</code></td><td>Current shell and future children</td></tr>
+      <tr><td>Inspect exported values</td><td><code>env</code> or <code>export -p</code></td><td>Current process environment</td></tr>
+      <tr><td>Inspect from Bun</td><td><code>bun -e 'console.log(process.env.KEY)'</code></td><td>What Bun actually received</td></tr>
+    </tbody>
+  </table>
+
+  <div class="rule">
+    <strong>Debugging question:</strong> which process loaded or exported the value, and was the target process started afterward as its child?
+  </div>
+
+  <h2>Loading a trusted, shell-compatible file</h2>
+  <pre><code>set -a          # automatically export assignments
+. ./.env       # `source .env` also works in Bash/Zsh
+set +a          # turn automatic export back off</code></pre>
+  <p><code>set -a</code> is defined by the <a href="https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html">Bash manual</a>. Sourcing executes the file as shell code; do it only with trusted, shell-compatible content. A dotenv parser and a shell are not guaranteed to accept identical syntax.</p>
+
+  <h2>Precedence principle</h2>
+  <p>“Which value wins?” has no universal answer. Precedence belongs to the loader—Bun, Wrangler, Docker Compose, or another tool. Consult that tool's documented order.</p>
+
+  <footer>
+    <p>Return to <a href="../lessons/0001-the-process-boundary.html">Lesson 0001: The process boundary</a>.</p>
+  </footer>
+</main>
+</body>
+</html>

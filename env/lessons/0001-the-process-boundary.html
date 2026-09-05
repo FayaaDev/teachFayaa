@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 0001 — The Process Boundary</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Environment management · Lesson 0001</div>
+    <h1>The process boundary</h1>
+    <p class="lede">Predict whether Bun receives a variable before worrying about `.env`, Docker, or Cloudflare.</p>
+    <p class="meta">Target time: 6 minutes · Bash and Zsh</p>
+  </header>
+
+  <section>
+    <h2>Your one mental model</h2>
+    <p>An environment is a collection of text key–value pairs attached to a <em>process</em>. When your shell starts Bun, Bun is a child process. The shell chooses which values cross that boundary.</p>
+
+    <div class="process" aria-label="Parent shell passes an environment snapshot to a child Bun process">
+      <div><strong>Parent</strong><br>your shell</div>
+      <span class="arrow" aria-hidden="true">→</span>
+      <div><strong>Child</strong><br>Bun process</div>
+    </div>
+
+    <div class="rule">
+      <strong>The rule:</strong> a normal shell variable stays in the shell. An <em>exported</em> variable is copied into subsequently started child processes. Changes do not travel backward from child to parent.
+    </div>
+    <p>This behavior comes from the <a href="https://www.gnu.org/software/bash/manual/html_node/Environment.html">GNU Bash environment model</a> and is shared by the Zsh use cases in this course.</p>
+  </section>
+
+  <section>
+    <h2>Three ways to set a value</h2>
+
+    <h3>1. Shell-only</h3>
+    <pre><code>API_URL=https://local.example
+bun -e 'console.log(process.env.API_URL)'  # undefined</code></pre>
+    <p>The shell can expand <code>$API_URL</code>, but Bun does not inherit it.</p>
+
+    <h3>2. Export for future children</h3>
+    <pre><code>export API_URL=https://local.example
+bun -e 'console.log(process.env.API_URL)'  # https://local.example</code></pre>
+    <p>The export attribute remains in this shell until you run <code>unset API_URL</code>, close the shell, or replace the value.</p>
+
+    <h3>3. Give it to one command</h3>
+    <pre><code>API_URL=https://ci.example bun -e \
+  'console.log(process.env.API_URL)'</code></pre>
+    <p>This assignment is in Bun's environment only for that invocation. It does not modify the variable in your current shell. The Bash manual explicitly defines these <a href="https://www.gnu.org/software/bash/manual/html_node/Environment.html">command-scoped assignments</a>.</p>
+  </section>
+
+  <section class="experiment">
+    <h2>Run the boundary experiment</h2>
+    <p>Paste these commands into either Zsh or Bash:</p>
+    <pre><code>LESSON_TOKEN=alpha
+printf 'shell: %s\n' "$LESSON_TOKEN"
+bun -e 'console.log("child:", process.env.LESSON_TOKEN)'
+
+export LESSON_TOKEN
+bun -e 'console.log("child:", process.env.LESSON_TOKEN)'
+
+LESSON_TOKEN=beta bun -e \
+  'console.log("one command:", process.env.LESSON_TOKEN)'
+printf 'shell after: %s\n' "$LESSON_TOKEN"
+
+unset LESSON_TOKEN</code></pre>
+    <p>Expected sequence: shell prints <code>alpha</code>; first child prints <code>undefined</code>; exported child prints <code>alpha</code>; one command prints <code>beta</code>; shell still prints <code>alpha</code>.</p>
+  </section>
+
+  <section>
+    <h2>Retrieval check</h2>
+    <p>Answer before testing. Both answer buttons contain two words and eleven characters.</p>
+
+    <div class="quiz" data-quiz>
+      <code>DEPLOY_ENV=staging</code>
+      <p>What happens when the shell later starts <code>bun run deploy</code>?</p>
+      <div class="choices">
+        <button type="button" data-correct="false">Gets passed</button>
+        <button type="button" data-correct="true">Stays local</button>
+      </div>
+      <p class="feedback" aria-live="polite"></p>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <code>export DEPLOY_ENV=staging</code>
+      <p>What happens when the shell later starts <code>bun run deploy</code>?</p>
+      <div class="choices">
+        <button type="button" data-correct="true">Gets passed</button>
+        <button type="button" data-correct="false">Stays local</button>
+      </div>
+      <p class="feedback" aria-live="polite"></p>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <code>DEPLOY_ENV=staging bun run deploy</code>
+      <p>What happens for this single Bun process?</p>
+      <div class="choices">
+        <button type="button" data-correct="false">Stays local</button>
+        <button type="button" data-correct="true">Gets passed</button>
+      </div>
+      <p class="feedback" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section class="callout warning">
+    <h2>A `.env` file is not an environment</h2>
+    <p>It is only a text file. A tool must parse it, or a shell must execute compatible contents, before any process receives those values. Bun is such a tool: it <a href="https://bun.com/docs/runtime/environment-variables">automatically reads supported `.env` files</a>. This distinction will explain most Bun-versus-npm surprises in the next lesson.</p>
+  </section>
+
+  <section>
+    <h2>Keep nearby</h2>
+    <p>Open the printable <a href="../reference/0001-process-environment-cheat-sheet.html">process environment cheat sheet</a> when debugging a missing value.</p>
+    <p><strong>Primary reading:</strong> the short <a href="https://www.gnu.org/software/bash/manual/html_node/Environment.html">GNU Bash Manual section on environments</a>.</p>
+  </section>
+
+  <footer>
+    <p>Tell your teacher what the experiment printed and answer the three checks from memory. Ask follow-up questions about anything that feels unclear.</p>
+  </footer>
+</main>
+</body>
+</html>
