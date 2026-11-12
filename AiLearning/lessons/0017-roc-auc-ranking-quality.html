@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 17: ROC-AUC — Ranking Quality</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav>
+    <a href="../sessions/04-model-evaluation-metrics/SESSION.md">Session 4 folder</a>
+    <a href="0016-f1-when-you-need-one-number.html">Lesson 16</a>
+  </nav>
+
+  <p class="eyebrow">Session 04 · 8 minutes · retrieval</p>
+  <h1>ROC-AUC — ranking quality</h1>
+  <p class="dek">Your tangible win: state what AUC actually measures when you change the decision threshold.</p>
+
+  <h2>Worked example: loan default model</h2>
+  <p>A bank’s loan model outputs a probability of default for each applicant. The bank can set the approval threshold at 10 %, 20 %, or 30 % default risk. At every possible threshold the model produces a different pair of true-positive and false-positive rates. The AUC tells how well the model ranks risky applicants above safe ones across all possible thresholds — without committing to one cutoff yet.</p>
+
+  <div class="rule"><strong>Memory rule:</strong> AUC = probability that a randomly chosen positive example is ranked higher than a randomly chosen negative example.</div>
+
+  <h2>Closed-book check</h2>
+  <section class="quiz" data-quiz data-answer="How well risky loans are ranked above safe ones" data-explanation="AUC summarises ranking performance across every possible approval threshold.">
+    <strong>In the loan-default model, what does a high AUC actually tell the bank?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="How well risky loans are ranked above safe ones">How well risky loans are ranked above safe ones</button>
+      <button class="quiz-option" data-value="The exact default probability cutoff">The exact default probability cutoff</button>
+      <button class="quiz-option" data-value="The percentage of loans approved">The percentage of loans approved</button>
+      <button class="quiz-option" data-value="The training time of the model">The training time of the model</button>
+    </div>
+    <p class="quiz-feedback"></p>
+  </section>
+
+  <h2>Primary source</h2>
+  <p>Google Machine Learning Crash Course — “Classification: ROC and AUC”: <a href="https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc">https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc</a></p>
+
+  <p class="note">Ask me any follow-up — the agent is your teacher.</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Session 3 Learning Safety</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+  <nav><a href="../lessons/0005-finding-groups-without-answers.html">Clustering</a><a href="../lessons/0006-turn-data-into-fair-numbers.html">Encoding and scaling</a><a href="../lessons/0007-keep-the-future-out.html">Leakage lesson</a><a href="../lessons/0008-cross-validation-is-a-rotation.html">Cross-validation</a><a href="../lessons/0012-purged-and-rolling-windows.html">Purged/rolling</a><a href="exam-map.html">Exam map</a></nav>
+  <p class="eyebrow">Quick Reference · Session 03</p>
+  <h1>Unsupervised learning &amp; safe features</h1>
+  <p class="dek">A compact decision aid: preserve the meaning of features, respect distance, and keep evaluation information out of training.</p>
+
+  <table>
+    <thead><tr><th>Situation</th><th>Default move</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr><td>No labels; compact, roughly round groups; choose a group count</td><td>Consider k-means</td><td>It assigns points to a specified <em>k</em> by distance to centers.</td></tr>
+      <tr><td>No labels; irregular groups and isolated noise</td><td>Consider DBSCAN</td><td>It forms dense regions and can label sparse points as noise.</td></tr>
+      <tr><td>Nominal category: city, colour, browser</td><td>One-hot encode</td><td>Separate 0/1 columns avoid creating a false numeric order.</td></tr>
+      <tr><td>Features have very different numeric units</td><td>Check scaling</td><td>Large units can dominate distances in k-means, k-NN, and many SVMs.</td></tr>
+      <tr><td>A feature uses post-prediction information</td><td>Remove or redefine it</td><td>It leaks future information unavailable in production.</td></tr>
+      <tr><td><strong>Time order carries information (forecasting, fraud trends)</strong></td><td><strong>Use forward-only split (expanding / purged / rolling)</strong></td><td><strong>Training must end before validation begins; no future records in training.</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Leakage prevention sequence</h2>
+  <ol>
+    <li>Define the exact prediction moment.</li>
+    <li>Remove information not available at that moment.</li>
+    <li>Split training and test data—respect time order when it matters.</li>
+    <li>Fit preprocessing only on the training portion.</li>
+    <li>Transform validation/test data using the fitted training process.</li>
+    <li>Use a pipeline to make the safe sequence repeatable.</li>
+  </ol>
+  <div class="rule"><strong>Retrieval rule:</strong> split first; fit on training only; transform everything with the fitted training process.</div>
+
+  <h2>Cross-validation in one line</h2>
+  <p>Keep a final test set aside. On the remaining training data, k-fold CV rotates one fold into validation, trains on the other <em>k − 1</em> folds, and averages the <em>k</em> validation scores. Every preprocessing step fits within each round’s training folds only.</p>
+
+  <h2>When time matters</h2>
+  <p>For forecasting or future-event prediction, validate on data later than the training data. An expanding window trains on an earlier period, validates on the next period, then adds that period to later training rounds. Do not randomly shuffle future observations into training.</p>
+
+  <p class="small">Sources: <a href="https://scikit-learn.org/stable/modules/clustering.html">scikit-learn: Clustering</a>, <a href="https://scikit-learn.org/stable/modules/preprocessing.html">Preprocessing Data</a>, <a href="https://scikit-learn.org/stable/common_pitfalls.html#data-leakage">Common Pitfalls: Data Leakage</a>, and <a href="https://scikit-learn.org/stable/modules/cross_validation.html">Cross-validation</a>.</p>
+</main>
+</body>
+</html>

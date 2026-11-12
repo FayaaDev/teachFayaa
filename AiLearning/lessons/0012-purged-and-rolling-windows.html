@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 12: Purged and Rolling Windows</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav>
+    <a href="../reference/session-03-learning-safety.html">Session 3 reference</a>
+    <a href="0011-timeseriesplit-in-one-rule.html">Lesson 11</a>
+  </nav>
+
+  <p class="eyebrow">Session 03 · 6 minutes · retrieval</p>
+  <h1>Purged and rolling windows</h1>
+  <p class="dek">Your tangible win: recognise when a simple expanding window still leaks information across the validation boundary.</p>
+
+  <h2>The extra rule</h2>
+  <p>Even with forward-only splits, a record that is too close to the validation start can still leak if the model uses features that look backward (lags, rolling statistics). A <strong>purged</strong> window removes a gap between train and validation. A <strong>rolling</strong> window keeps training size fixed by dropping the oldest data.</p>
+
+  <div class="rule"><strong>Memory rule:</strong> if the feature window can “see” into the validation period, add a purge gap or switch to rolling.</div>
+
+  <h2>Closed-book check</h2>
+  <section class="quiz" data-quiz data-answer="Purge the last 7 days of training" data-explanation="A 30-day lag feature would otherwise read data from inside the validation month.">
+    <strong>You use a 30-day lag feature. Validation starts on 1 May. Which action prevents leakage?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Purge the last 7 days of training">Purge the last 7 days of training</button>
+      <button class="quiz-option" data-value="Add May records to training">Add May records to training</button>
+      <button class="quiz-option" data-value="Use all data up to 30 Apr">Use all data up to 30 Apr</button>
+      <button class="quiz-option" data-value="Ignore the lag length">Ignore the lag length</button>
+    </div>
+    <p class="quiz-feedback"></p>
+  </section>
+
+  <h2>Primary source</h2>
+  <p>scikit-learn TimeSeriesSplit + the “purging” discussion in the cross-validation user guide: <a href="https://scikit-learn.org/stable/modules/cross_validation.html">https://scikit-learn.org/stable/modules/cross_validation.html</a></p>
+
+  <p class="note">Ask me any follow-up — the agent is your teacher.</p>
+</main>
+</body>
+</html>

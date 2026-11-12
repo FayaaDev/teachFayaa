@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 16: F1 — When You Need One Number</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav>
+    <a href="../sessions/04-model-evaluation-metrics/SESSION.md">Session 4 folder</a>
+    <a href="0015-precision-vs-recall-the-cost-decides.html">Lesson 15</a>
+  </nav>
+
+  <p class="eyebrow">Session 04 · 7 minutes · retrieval</p>
+  <h1>F1 — when you need one number</h1>
+  <p class="dek">Your tangible win: state the exact situation in which F1 is the right single metric to report.</p>
+
+  <h2>Worked example: spam filter</h2>
+  <p>A company’s spam filter must block real spam (high recall) while avoiding false positives that send legitimate customer emails to the junk folder (high precision). The two errors cost roughly the same: a missed spam email wastes 30 seconds of employee time; a blocked real email loses a potential sale worth about the same. When the costs are balanced, neither precision nor recall alone tells the full story.</p>
+
+  <div class="rule"><strong>Memory rule:</strong> use F1 when the cost of a false positive and a false negative are roughly equal and you must report one number.</div>
+
+  <h2>Closed-book check</h2>
+  <section class="quiz" data-quiz data-answer="Report the F1 score" data-explanation="The costs of the two error types are balanced, so the harmonic mean (F1) gives the fairest single view.">
+    <strong>In the spam-filter example above, which single metric should the team report?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Report the F1 score">Report the F1 score</button>
+      <button class="quiz-option" data-value="Report only precision">Report only precision</button>
+      <button class="quiz-option" data-value="Report only recall">Report only recall</button>
+      <button class="quiz-option" data-value="Report accuracy only">Report accuracy only</button>
+    </div>
+    <p class="quiz-feedback"></p>
+  </section>
+
+  <h2>Primary source</h2>
+  <p>Google Machine Learning Crash Course — “Classification: Precision and Recall” (F1 section): <a href="https://developers.google.com/machine-learning/crash-course/classification/precision-and-recall">https://developers.google.com/machine-learning/crash-course/classification/precision-and-recall</a></p>
+
+  <p class="note">Ask me any follow-up — the agent is your teacher and can add the next metric scenario with a new example immediately.</p>
+</main>
+</body>
+</html>

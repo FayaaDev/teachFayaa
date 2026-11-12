@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Scenario Triage</title><link rel="stylesheet" href="../assets/course.css"></head>
+<body><main>
+<div class="eyebrow">Lesson 1 · 12 minutes</div><h1>Scenario triage: choose the right tool</h1>
+<p class="lede">Your exam rewards decisions, not buzzwords. In each scenario, identify <strong>the target</strong>, <strong>the costly mistake</strong>, and <strong>the change needed</strong>.</p>
+<div class="score" id="score">Score: 0 / 8</div>
+<h2>The five-question decision routine</h2>
+<ol><li><strong>Is there a target label?</strong> Yes → supervised; no → likely unsupervised.</li><li><strong>What form is the output?</strong> Category → classification; numeric value → regression.</li><li><strong>Which error hurts most?</strong> False positives → precision; false negatives → recall.</li><li><strong>Does it fail only on unseen data?</strong> Suspect overfitting, leakage, or drift.</li><li><strong>Does the answer need current private facts?</strong> Retrieve trusted documents (RAG), then validate.</li></ol>
+<div class="callout"><strong>Win for today:</strong> You will stop choosing a metric or an LLM technique by name alone. You will choose it from the risk described in the prompt.</div>
+<section class="quiz" aria-label="Scenario quiz">
+<h2>Retrieval drill · answer before looking at feedback</h2>
+<p class="small">Each option is intentionally the same one-character label. Read the options; then commit. Immediate feedback follows.</p>
+<div class="question" data-answer="B" data-explain="The outcome is a number (price), so this is regression."><strong>1. Predict a home’s sale price.</strong><div class="answers"><button>A — Classification</button><button>B — Regression</button><button>C — Clustering</button><button>D — Retrieval</button></div><p class="feedback"></p></div>
+<div class="question" data-answer="C" data-explain="Missing a real positive is a false negative. Recall measures how many actual positives were found."><strong>2. A safety screen must catch nearly every dangerous item; a human can review false alarms.</strong><div class="answers"><button>A — Accuracy</button><button>B — Precision</button><button>C — Recall</button><button>D — Latency</button></div><p class="feedback"></p></div>
+<div class="question" data-answer="A" data-explain="A rare positive class makes accuracy misleading; F1 balances precision and recall."><strong>3. Disease prevalence is 1%; both kinds of classification error matter.</strong><div class="answers"><button>A — F1 score</button><button>B — Accuracy</button><button>C — MSE loss</button><button>D — R² score</button></div><p class="feedback"></p></div>
+<div class="question" data-answer="D" data-explain="The training/test gap is the key evidence of overfitting (high variance)."><strong>4. Training accuracy is 99%; held-out accuracy is 61%.</strong><div class="answers"><button>A — Underfitting</button><button>B — Data drift</button><button>C — High bias</button><button>D — Overfitting</button></div><p class="feedback"></p></div>
+<div class="question" data-answer="B" data-explain="RAG retrieves current, governed source material into the prompt; it does not alter the model’s weights."><strong>5. A policy assistant must answer from today’s approved internal manuals and cite them.</strong><div class="answers"><button>A — Fine-tuning</button><button>B — RAG</button><button>C — Quantization</button><button>D — CNN</button></div><p class="feedback"></p></div>
+<div class="question" data-answer="C" data-explain="L1 regularization can drive some coefficients exactly to zero, selecting features."><strong>6. You want a sparse linear model that removes some weak features.</strong><div class="answers"><button>A — L2 penalty</button><button>B — Standardize</button><button>C — L1 penalty</button><button>D — Cross-validate</button></div><p class="feedback"></p></div>
+<div class="question" data-answer="A" data-explain="A gradual shift in live input distributions is data drift. Check data quality and performance before retraining."><strong>7. Input data changes after launch: purchases now arrive mostly from a new region.</strong><div class="answers"><button>A — Data drift</button><button>B — Model drift</button><button>C — Overfitting</button><button>D — Leakage</button></div><p class="feedback"></p></div>
+<div class="question" data-answer="D" data-explain="A canary release limits exposure by sending a small traffic share first, with metrics and rollback ready."><strong>8. Release a new model while limiting risk to a small subset of users first.</strong><div class="answers"><button>A — Blue-green</button><button>B — CI/CD</button><button>C — Docker</button><button>D — Canary</button></div><p class="feedback"></p></div>
+</section>
+<h2>Last-minute mental model</h2>
+<div class="grid"><div class="card"><h3>Before building</h3><p>Define the target, data quality, error cost, privacy/fairness risks, and success metric.</p></div><div class="card"><h3>Before deploying</h3><p>Validate on held-out data, document limits, roll out safely, monitor performance and impacts, preserve human escalation.</p></div></div>
+<p class="rule"><strong>Next 25 minutes:</strong> Read the <a href="../reference/0001-ai-ml-exam-glossary.html">three-page glossary</a> once, cover it, then explain the bold term in each card aloud. Retrieval—not rereading—is the point.</p>
+<h2>Primary source</h2><p>Read the relevant sections of <a href="https://developers.google.com/machine-learning/crash-course">Google’s Machine Learning Crash Course</a> for authoritative definitions and examples. Metric terminology is cross-checked with <a href="https://scikit-learn.org/stable/modules/model_evaluation.html">scikit-learn’s evaluation guide</a>.</p>
+<footer>Ask me any follow-up question—especially “why is option X wrong?” I can generate the next rapid-fire exam drill from your weak answers.</footer>
+</main>
+<script>
+let score = 0; const total = document.querySelectorAll('.question').length;
+document.querySelectorAll('.question').forEach(q => q.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+  if (q.dataset.done) return; q.dataset.done = 'true'; const chosen = b.textContent.trim()[0]; const correct = q.dataset.answer;
+  q.querySelectorAll('button').forEach(x => { if (x.textContent.trim()[0] === correct) x.classList.add('correct'); });
+  if (chosen === correct) { score++; q.querySelector('.feedback').textContent = 'Correct. ' + q.dataset.explain; } else { b.classList.add('wrong'); q.querySelector('.feedback').textContent = 'Not quite. ' + q.dataset.explain; }
+  document.querySelector('#score').textContent = `Score: ${score} / ${total}`;
+})));
+</script></body></html>

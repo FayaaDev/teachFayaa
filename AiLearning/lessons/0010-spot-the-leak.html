@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 10: Spot the Leak — Forward-Only Splits</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav>
+    <a href="../reference/session-03-learning-safety.html">Session 3 reference</a>
+    <a href="0009-validate-on-the-future.html">Lesson 9</a>
+  </nav>
+
+  <p class="eyebrow">Session 03 · 6 minutes · retrieval</p>
+  <h1>Spot the leak</h1>
+  <p class="dek">Your tangible win: name the exact record that leaks future information in a proposed split.</p>
+
+  <h2>The single rule</h2>
+  <p>Training data must never contain information that would only be known <em>after</em> the validation period begins. Any record whose timestamp is later than the first validation timestamp is future leakage.</p>
+
+  <div class="rule"><strong>Memory rule:</strong> if its date is after the validation start, it cannot be in training.</div>
+
+  <h2>Closed-book drill</h2>
+  <p>Choose before reopening any notes. Each question locks after one choice.</p>
+
+  <section class="quiz" data-quiz data-answer="Train Jan–Mar, validate Apr" data-explanation="April is the first validation month; any April record in training would be future leakage.">
+    <strong>Which split is valid for April demand forecasting?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Train Jan–Mar, validate Apr">Train Jan–Mar, validate Apr</button>
+      <button class="quiz-option" data-value="Train Jan–Apr, validate Mar">Train Jan–Apr, validate Mar</button>
+      <button class="quiz-option" data-value="Train Feb–Apr, validate Jan">Train Feb–Apr, validate Jan</button>
+      <button class="quiz-option" data-value="Train Jan–Feb, validate Mar–Apr">Train Jan–Feb, validate Mar–Apr</button>
+    </div>
+    <p class="quiz-feedback"></p>
+  </section>
+
+  <section class="quiz" data-quiz data-answer="Train to 15 Mar, validate 16 Mar" data-explanation="The validation window starts on 16 March; any record from 16 March onward cannot appear in training.">
+    <strong>Which split respects the future boundary for mid-March predictions?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Train to 15 Mar, validate 16 Mar">Train to 15 Mar, validate 16 Mar</button>
+      <button class="quiz-option" data-value="Train to 20 Mar, validate 10 Mar">Train to 20 Mar, validate 10 Mar</button>
+      <button class="quiz-option" data-value="Train all Mar, validate last week">Train all Mar, validate last week</button>
+      <button class="quiz-option" data-value="Train Feb, validate all Mar">Train Feb, validate all Mar</button>
+    </div>
+    <p class="quiz-feedback"></p>
+  </section>
+
+  <h2>Primary source</h2>
+  <p>Read the scikit-learn TimeSeriesSplit documentation and the “Common Pitfalls” section on fitting only on training folds: <a href="https://scikit-learn.org/stable/modules/cross_validation.html">https://scikit-learn.org/stable/modules/cross_validation.html</a></p>
+
+  <p class="note">Ask me any follow-up question — the agent is your teacher and can clarify or add another scenario immediately.</p>
+</main>
+</body>
+</html>

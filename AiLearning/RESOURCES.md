@@ -2,7 +2,7 @@
 
 ## Knowledge
 
-- [Official AI Engineer badge record — Athka X, SDAIA](https://athkax.sdaia.gov.sa/badges/61af22d9-2e3e-4412-9675-e8b4504a7d20)
+- [Official SDAIA AI Engineer badge record — Athka X, SDAIA](https://athkax.sdaia.gov.sa/badges/61af22d9-2e3e-4412-9675-e8b4504a7d20)
   Primary source for badge scope, assessment method, levels, eligibility, and registration status. It confirms Assistant, Associate, and Expert as the official English level names.
 - [Official AI Engineer badge API record — English](https://athkax.sdaia.gov.sa/api/v1/public/badges/61af22d9-2e3e-4412-9675-e8b4504a7d20?locale=en)
   Machine-readable primary source useful when the public page is difficult to inspect.
@@ -42,6 +42,8 @@
   Session 3 reference for categorical encoding, scaling, and feature transformations.
 - [Common Pitfalls and Recommended Practices — scikit-learn](https://scikit-learn.org/stable/common_pitfalls.html)
   Session 3 primary source for preventing data leakage by fitting preprocessing only on training data and using pipelines.
+- [Cross-validation: evaluating estimator performance — scikit-learn](https://scikit-learn.org/stable/modules/cross_validation.html)
+  Session 3 primary source for k-fold cross-validation, held-out evaluation, and fitting transformations only on each training split.
 
 ## Wisdom (Communities)
 

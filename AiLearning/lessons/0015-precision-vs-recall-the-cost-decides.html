@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 15: Precision vs Recall — the Cost Decides</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav>
+    <a href="../sessions/04-model-evaluation-metrics/SESSION.md">Session 4 folder</a>
+    <a href="0014-one-metric-is-rarely-enough.html">Lesson 14</a>
+  </nav>
+
+  <p class="eyebrow">Session 04 · 8 minutes · retrieval</p>
+  <h1>Precision vs Recall — the cost decides</h1>
+  <p class="dek">Your tangible win: given a concrete cost ratio, name whether you should optimise precision or recall first.</p>
+
+  <h2>Worked example: cancer screening</h2>
+  <p>A hospital runs a screening test on 10 000 patients. 80 patients actually have early-stage cancer. Missing one cancer case (false negative) costs SAR 120 000 in later treatment and lawsuits. A false positive only costs SAR 800 for a follow-up biopsy. The hospital therefore accepts many extra biopsies to avoid missing even one cancer case.</p>
+
+  <div class="rule"><strong>Memory rule:</strong> when the cost of a false negative is much higher than a false positive, optimise recall first.</div>
+
+  <h2>Closed-book check</h2>
+  <section class="quiz" data-quiz data-answer="Optimise recall even if precision drops" data-explanation="Missing one cancer case costs 150 times more than an extra biopsy, so recall is the primary target.">
+    <strong>In the cancer screening example above, which metric should the hospital optimise first?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Optimise recall even if precision drops">Optimise recall even if precision drops</button>
+      <button class="quiz-option" data-value="Optimise precision to avoid biopsies">Optimise precision to avoid biopsies</button>
+      <button class="quiz-option" data-value="Use accuracy as the main number">Use accuracy as the main number</button>
+      <button class="quiz-option" data-value="Ignore both and use F1 only">Ignore both and use F1 only</button>
+    </div>
+    <p class="quiz-feedback"></p>
+  </section>
+
+  <h2>Primary source</h2>
+  <p>Google Machine Learning Crash Course — “Classification: Precision and Recall”: <a href="https://developers.google.com/machine-learning/crash-course/classification/precision-and-recall">https://developers.google.com/machine-learning/crash-course/classification/precision-and-recall</a></p>
+
+  <p class="note">Ask me any follow-up — the agent is your teacher and can add the next metric scenario with a new example immediately.</p>
+</main>
+</body>
+</html>

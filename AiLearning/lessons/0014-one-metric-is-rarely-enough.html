@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 14: One Metric Is Rarely Enough</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav>
+    <a href="../sessions/04-model-evaluation-metrics/SESSION.md">Session 4 folder</a>
+    <a href="../reference/session-03-learning-safety.html">Session 3 reference</a>
+    <a href="0013-session3-reference-update.html">Lesson 13</a>
+  </nav>
+
+  <p class="eyebrow">Session 04 · 7 minutes · retrieval</p>
+  <h1>One metric is rarely enough</h1>
+  <p class="dek">Your tangible win: name the single business constraint that decides which metric to optimise first.</p>
+
+  <h2>The production question</h2>
+  <p>Accuracy alone hides the cost of the mistakes that matter. Example: a fraud-detection model trained on 100 000 transactions is 99.2 % accurate. It misses 40 of the 50 actual fraud cases (false negatives). Each missed fraud costs the bank SAR 8 000. The 200 false positives only cost SAR 50 each in manual review. The business therefore cares far more about catching the 40 missed frauds than about the extra 200 reviews.</p>
+  <p>The right metric is the one that penalises the error the business actually pays for.</p>
+
+  <div class="rule"><strong>Memory rule:</strong> start with the cost of a false negative versus a false positive; that ratio names your primary metric.</div>
+
+  <h2>Closed-book check</h2>
+  <section class="quiz" data-quiz data-answer="Cost of missing one fraud case" data-explanation="The business pays far more for an undetected fraud than for an extra manual review.">
+    <strong>A credit-card fraud model must catch rare but expensive fraud. Which single number should you optimise first?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Cost of missing one fraud case">Cost of missing one fraud case</button>
+      <button class="quiz-option" data-value="Overall accuracy on all transactions">Overall accuracy on all transactions</button>
+      <button class="quiz-option" data-value="Speed of model training">Speed of model training</button>
+      <button class="quiz-option" data-value="Number of features used">Number of features used</button>
+    </div>
+    <p class="quiz-feedback"></p>
+  </section>
+
+  <h2>Primary source</h2>
+  <p>Google Machine Learning Crash Course — “Classification: Precision and Recall” and “Classification: ROC and AUC”: <a href="https://developers.google.com/machine-learning/crash-course/classification">https://developers.google.com/machine-learning/crash-course/classification</a></p>
+
+  <p class="note">Ask me any follow-up — the agent is your teacher and can add the next metric scenario immediately.</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 11: TimeSeriesSplit in One Rule</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav>
+    <a href="../reference/session-03-learning-safety.html">Session 3 reference</a>
+    <a href="0010-spot-the-leak.html">Lesson 10</a>
+  </nav>
+
+  <p class="eyebrow">Session 03 · 5 minutes · retrieval</p>
+  <h1>TimeSeriesSplit in one rule</h1>
+  <p class="dek">Your tangible win: state what n_splits actually controls and why the last fold is always the final validation set.</p>
+
+  <h2>The rule</h2>
+  <p><code>TimeSeriesSplit(n_splits=k)</code> creates k validation periods. Training always grows from the earliest data up to—but never past—the start of each validation period. The final fold’s validation set is the most recent data you have.</p>
+
+  <div class="rule"><strong>Memory rule:</strong> n_splits = number of validation turns; the last turn always validates on the newest records.</div>
+
+  <h2>Closed-book check</h2>
+  <section class="quiz" data-quiz data-answer="Three validation turns on the newest data" data-explanation="n_splits=3 means three forward validation periods; the third one uses the most recent records as its validation set.">
+    <strong>With TimeSeriesSplit(n_splits=3) on 12 months of data, what do you actually get?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Three validation turns on the newest data">Three validation turns on the newest data</button>
+      <button class="quiz-option" data-value="Three equal random test sets">Three equal random test sets</button>
+      <button class="quiz-option" data-value="One train set and three test sets">One train set and three test sets</button>
+      <button class="quiz-option" data-value="Three independent models trained">Three independent models trained</button>
+    </div>
+    <p class="quiz-feedback"></p>
+  </section>
+
+  <h2>Primary source</h2>
+  <p>Official scikit-learn TimeSeriesSplit page: <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html">https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html</a></p>
+
+  <p class="note">Ask me any follow-up — the agent is your teacher and can add another scenario or move to Session 4 metrics immediately.</p>
+</main>
+</body>
+</html>

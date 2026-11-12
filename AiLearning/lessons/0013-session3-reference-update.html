@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 13: Session 3 Reference Update</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+  <nav>
+    <a href="../reference/session-03-learning-safety.html">Updated reference</a>
+    <a href="0012-purged-and-rolling-windows.html">Lesson 12</a>
+  </nav>
+
+  <p class="eyebrow">Session 03 · 3 minutes · reference</p>
+  <h1>Session 3 reference — one new row</h1>
+  <p class="dek">Your tangible win: see the complete leakage-prevention table with the time-series case added.</p>
+
+  <h2>Updated decision table (new row in bold)</h2>
+  <table>
+    <thead><tr><th>Situation</th><th>Default move</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr><td>No labels; compact, roughly round groups; choose a group count</td><td>Consider k-means</td><td>It assigns points to a specified <em>k</em> by distance to centers.</td></tr>
+      <tr><td>No labels; irregular groups and isolated noise</td><td>Consider DBSCAN</td><td>It forms dense regions and can label sparse points as noise.</td></tr>
+      <tr><td>Nominal category: city, colour, browser</td><td>One-hot encode</td><td>Separate 0/1 columns avoid creating a false numeric order.</td></tr>
+      <tr><td>Features have very different numeric units</td><td>Check scaling</td><td>Large units can dominate distances in k-means, k-NN, and many SVMs.</td></tr>
+      <tr><td>A feature uses post-prediction information</td><td>Remove or redefine it</td><td>It leaks future information unavailable in production.</td></tr>
+      <tr><td><strong>Time order carries information (forecasting, fraud trends)</strong></td><td><strong>Use forward-only split (expanding / purged / rolling)</strong></td><td><strong>Training must end before validation begins; no future records in training.</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p class="note">The full updated reference is now at <a href="../reference/session-03-learning-safety.html">reference/session-03-learning-safety.html</a>. Ask me if you want any row expanded or a Session 4 lesson next.</p>
+</main>
+</body>
+</html>

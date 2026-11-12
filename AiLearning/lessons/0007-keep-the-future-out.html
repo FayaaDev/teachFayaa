@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 7: Keep the Future Out</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="../sessions/03-unsupervised-learning-and-features/SESSION.md">Session folder</a><a href="0006-turn-data-into-fair-numbers.html">Lesson 6</a><a href="../reference/session-03-learning-safety.html">Leakage reference</a></nav>
+  <p class="eyebrow">Session 03 follow-up · 8 minutes · D2</p>
+  <h1>Keep the future out of training</h1>
+  <p class="dek">Your tangible win: detect data leakage before a suspiciously good validation score misleads a production decision.</p>
+
+  <h2>What leakage is</h2>
+  <p><strong>Data leakage</strong> happens when training uses information that would not be available when the model makes its real prediction. It makes offline evaluation look better than the deployed model will be.</p>
+  <p>Ask one question for every feature: <strong>“Would I know this at the exact time I need to predict?”</strong> If not, it cannot be used as-is.</p>
+
+  <h2>A simple example</h2>
+  <p>You predict whether a patient will be readmitted when they leave hospital. A feature named <em>number of follow-up visits in the next 30 days</em> is highly predictive—but it occurs after discharge. It reveals the future, so it is leakage.</p>
+  <div class="rule"><strong>Time rule:</strong> calculate every feature using only information available before the prediction moment.</div>
+
+  <h2>Leakage can hide in preprocessing</h2>
+  <p>Suppose you standardize income by subtracting the dataset mean and dividing by its spread. If you calculate those values using all rows before the train/test split, the test set has influenced training. This is leakage even though the target label was never copied.</p>
+  <p>Safe order:</p>
+  <ol>
+    <li>Split the data into training and test sets.</li>
+    <li><strong>Fit</strong> the encoder, scaler, feature selector, or imputer on training data only.</li>
+    <li><strong>Transform</strong> training and test data with that fitted training-only process.</li>
+  </ol>
+  <p>A <strong>pipeline</strong> packages those steps with the model, so the same safe order is applied during validation and production.</p>
+
+  <h2>Two high-value warning signs</h2>
+  <table>
+    <thead><tr><th>Signal</th><th>Question to investigate</th></tr></thead>
+    <tbody>
+      <tr><td>Unexpectedly excellent validation score</td><td>Does any feature contain a future outcome, a proxy for the label, or data from the test set?</td></tr>
+      <tr><td>Random split for time-dependent data</td><td>Could a later event appear in training while an earlier event appears in test?</td></tr>
+    </tbody>
+  </table>
+  <p>For forecasting or any time-ordered process, evaluate on data that comes later than the training data. A random split can accidentally teach the model from the future.</p>
+
+  <h2>Closed-book check</h2>
+  <p>Choose before reopening the explanation. Each question locks after one choice.</p>
+
+  <section class="quiz" data-quiz data-answer="Leakage" data-explanation="A feature measured after the prediction moment carries future information. That makes the evaluation unreliable: it is data leakage.">
+    <strong>A loan-default model uses “number of collection calls after the loan was issued.” What is the main risk?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Scaling">Scaling</button>
+      <button class="quiz-option" data-value="Bagging">Bagging</button>
+      <button class="quiz-option" data-value="Leakage">Leakage</button>
+      <button class="quiz-option" data-value="Sampling">Sampling</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz data-answer="Training only" data-explanation="The scaler must learn its parameters from training data only. Then use that fitted scaler to transform both training and test data.">
+    <strong>On which data should a scaler learn its mean and spread before evaluating a test set?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="All records">All records</button>
+      <button class="quiz-option" data-value="Test records">Test records</button>
+      <button class="quiz-option" data-value="Training only">Training only</button>
+      <button class="quiz-option" data-value="Future records">Future records</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>Transfer prompt</h2>
+  <p>A retailer predicts whether a customer will return an online order. One feature is “refund issued within 14 days.” Is it safe? Answer using the prediction moment, not whether the feature correlates strongly with returns.</p>
+
+  <h2>Primary source</h2>
+  <p>Read scikit-learn’s <a href="https://scikit-learn.org/stable/common_pitfalls.html#data-leakage">Common Pitfalls: Data leakage</a>. It demonstrates why splitting first and using a pipeline prevent test data from influencing training.</p>
+
+  <div class="callout">Ask me to explain <em>fit</em>, <em>transform</em>, or a time-based split in simpler words. When ready, answer the transfer prompt or say <strong>“quiz me on leakage.”</strong></div>
+</main>
+</body>
+</html>

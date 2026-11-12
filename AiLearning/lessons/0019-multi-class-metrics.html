@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 19: Multi-Class Metrics</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav>
+    <a href="../sessions/04-model-evaluation-metrics/SESSION.md">Session 4 folder</a>
+    <a href="0018-regression-metrics-mae-vs-rmse.html">Lesson 18</a>
+  </nav>
+
+  <p class="eyebrow">Session 04 · 7 minutes · retrieval</p>
+  <h1>Multi-class metrics</h1>
+  <p class="dek">Your tangible win: name the simplest way to turn per-class F1 scores into one number when classes are imbalanced.</p>
+
+  <h2>Worked example: Arabic dialect classification</h2>
+  <p>A model classifies social-media posts into four dialects: Gulf, Levantine, Egyptian, and Modern Standard. The training set has 8 000 Gulf posts but only 800 Egyptian posts. Reporting a single accuracy number would hide poor performance on the rare Egyptian class.</p>
+
+  <div class="rule"><strong>Memory rule:</strong> use macro-average F1 when every class must be treated equally regardless of size.</div>
+
+  <h2>Closed-book check</h2>
+  <section class="quiz" data-quiz data-answer="Report macro-average F1" data-explanation="Macro-average gives equal weight to each class, so the rare Egyptian class is not hidden by the large Gulf class.">
+    <strong>For the dialect classifier, which single number best shows performance on every class?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Report macro-average F1">Report macro-average F1</button>
+      <button class="quiz-option" data-value="Report overall accuracy">Report overall accuracy</button>
+      <button class="quiz-option" data-value="Report only Gulf F1">Report only Gulf F1</button>
+      <button class="quiz-option" data-value="Report weighted F1 only">Report weighted F1 only</button>
+    </div>
+    <p class="quiz-feedback"></p>
+  </section>
+
+  <h2>Primary source</h2>
+  <p>scikit-learn — “Classification metrics” (multi-class section): <a href="https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics">https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics</a></p>
+
+  <p class="note">Ask me any follow-up — the agent is your teacher.</p>
+</main>
+</body>
+</html>

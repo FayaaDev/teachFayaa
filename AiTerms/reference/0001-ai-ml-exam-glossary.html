@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI/ML Associate Glossary</title><link rel="stylesheet" href="../assets/course.css"></head>
+<body><main>
+<div class="eyebrow">AI Badges · associate quick reference</div><h1>Three-page AI/ML glossary</h1>
+<p class="lede">Use this for a fast second pass. For every term, ask: <em>what problem does it solve, and when is it the wrong choice?</em></p>
+<h2>1 · Classical machine learning</h2>
+<div class="grid">
+<div class="card"><h3>Supervised learning</h3><p>Learn from labeled examples (input → target). Classification predicts a category; regression predicts a number.</p></div>
+<div class="card"><h3>Unsupervised learning</h3><p>Find structure in unlabeled data: clusters, anomalies, or lower-dimensional representations.</p></div>
+<div class="card"><h3>Overfitting</h3><p>Fits training noise; training score is strong but new-data score weak. Reduce complexity, add data, regularize, or validate properly.</p></div>
+<div class="card"><h3>Bias / variance</h3><p>High bias underfits (too simple). High variance overfits (too sensitive to training set). Balance both for generalization.</p></div>
+<div class="card"><h3>Cross-validation</h3><p>Repeated train/validation splits (often k-fold) to estimate performance more reliably when data is limited.</p></div>
+<div class="card"><h3>Feature engineering</h3><p>Create or transform useful input signals from raw data. Must be fit using training data only to prevent leakage.</p></div>
+<div class="card"><h3>Normalization / standardization</h3><p>Normalization usually rescales to a bounded range, e.g. 0–1. Standardization makes mean 0 and standard deviation 1.</p></div>
+<div class="card"><h3>L1 / L2 regularization</h3><p>Penalty on weights to curb overfitting. L1 tends to make some weights exactly zero; L2 smoothly shrinks all weights.</p></div>
+</div>
+<h2>2 · Evaluation: select the failure you cannot afford</h2>
+<div class="grid">
+<div class="card"><h3>Precision</h3><p>Of predicted positives, how many were right? Choose when false positives are costly.</p></div>
+<div class="card"><h3>Recall (sensitivity)</h3><p>Of actual positives, how many were found? Choose when false negatives are costly.</p></div>
+<div class="card"><h3>F1 score</h3><p>Harmonic mean of precision and recall. Useful when classes are imbalanced and both errors matter.</p></div>
+<div class="card"><h3>ROC-AUC</h3><p>Threshold-independent ranking measure across true-positive/false-positive tradeoffs. It does not set the operating threshold.</p></div>
+</div>
+<div class="rule"><strong>Exam shortcut:</strong> Fraud review is expensive → favor precision. Missed cancer/fraud is dangerous → favor recall. Overall accuracy can deceive when positives are rare.</div>
+<h2>3 · Deep learning and LLMs</h2>
+<div class="grid">
+<div class="card"><h3>CNN</h3><p>Neural network that uses local filters and shared weights; especially suited to spatial patterns in images.</p></div>
+<div class="card"><h3>Transformer / self-attention</h3><p>A transformer uses attention to weigh relationships between tokens. Self-attention lets each token consider other tokens in the same sequence.</p></div>
+<div class="card"><h3>Token / context window</h3><p>A token is a chunk of text processed by a model. The context window is the total token budget for input plus generated output.</p></div>
+<div class="card"><h3>Embedding / vector DB</h3><p>An embedding is a numeric representation where semantic similarity is often spatial closeness. A vector database stores and searches these vectors.</p></div>
+<div class="card"><h3>RAG</h3><p>Retrieve relevant external documents, then give them to the model as context. Best for current, attributable knowledge without changing model weights.</p></div>
+<div class="card"><h3>Fine-tuning / prompting</h3><p>Prompting changes instructions/examples at inference. Fine-tuning updates behavior through additional training data; it costs more and needs evaluation.</p></div>
+<div class="card"><h3>Hallucination mitigation</h3><p>Ground answers in trusted retrieved sources, constrain outputs, cite evidence, validate critical facts, and route high-risk cases to humans.</p></div>
+<div class="card"><h3>Quantization</h3><p>Represent weights/activations with fewer bits to reduce memory and speed inference, usually accepting some accuracy trade-off.</p></div>
+</div>
+<h2>4 · Operations and responsible AI</h2>
+<div class="grid">
+<div class="card"><h3>API / Docker / CI/CD</h3><p>An API exposes a service interface. Docker packages software and dependencies. CI/CD automates build, test, and release steps.</p></div>
+<div class="card"><h3>Data / model drift</h3><p>Data drift: live inputs change. Model/concept drift: the input→outcome relationship changes. Monitor both and retrain only after validation.</p></div>
+<div class="card"><h3>Blue-green / canary</h3><p>Blue-green switches all traffic between two environments. Canary exposes a small share first, monitors it, then expands or rolls back.</p></div>
+<div class="card"><h3>Responsible AI</h3><p>Assess fairness, protect privacy, document and explain decisions appropriately, establish governance, monitor impacts, and retain meaningful human oversight.</p></div>
+</div>
+<footer><a href="../lessons/0001-scenario-triage.html">Take the first scenario drill →</a> · Sources: <a href="https://developers.google.com/machine-learning/crash-course">Google ML Crash Course</a>, <a href="https://scikit-learn.org/stable/modules/model_evaluation.html">scikit-learn evaluation</a>, <a href="https://www.nist.gov/itl/ai-risk-management-framework">NIST AI RMF</a>.</footer>
+</main></body></html>

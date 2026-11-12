@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 8: Cross-Validation Is a Rotation</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="../sessions/03-unsupervised-learning-and-features/SESSION.md">Session folder</a><a href="0007-keep-the-future-out.html">Lesson 7</a><a href="../reference/session-03-learning-safety.html">Session 3 reference</a></nav>
+  <p class="eyebrow">Session 03 foundation · 8 minutes · D2</p>
+  <h1>Cross-validation is a rotation</h1>
+  <p class="dek">Your tangible win: explain why cross-validation produces several validation scores instead of trusting one arbitrary split.</p>
+
+  <h2>First, keep a final test set aside</h2>
+  <p>Before choosing a model or tuning settings, set aside a <strong>final test set</strong>. Do not use it to choose between models. It is the last honest check after decisions are complete.</p>
+  <p>Cross-validation happens on the remaining <strong>training data</strong>. It helps you compare choices without committing to one small validation split.</p>
+
+  <h2>Five-fold cross-validation</h2>
+  <p>Split the training data into five parts, called <strong>folds</strong>. In round one, train on four folds and validate on the fifth:</p>
+  <div class="folds" aria-label="Five folds: folds one through four are training; fold five is validation">
+    <div class="fold">Train</div><div class="fold">Train</div><div class="fold">Train</div><div class="fold">Train</div><div class="fold validation">Validate</div>
+  </div>
+  <p class="folds-caption">Round 1 of 5. In the next round, a different fold becomes validation.</p>
+  <p>Repeat until <strong>each fold has been the validation fold once</strong>. This creates five validation scores. Their average is the cross-validation estimate.</p>
+  <div class="rule"><strong>Memory rule:</strong> k folds → train k models; each model validates on a different fold; average the k scores.</div>
+
+  <h2>Why rotate?</h2>
+  <p>One validation split can be unusually easy or unusually hard. Rotation checks a model against several held-out portions of the available training data, so a choice is less dependent on one lucky split.</p>
+  <p>It costs more computation: in five-fold CV, you fit the model five times. That cost is often worthwhile when data is limited or you need to compare model settings fairly.</p>
+
+  <h2>Where leakage fits</h2>
+  <p>Each round has its own mini train/validation boundary. A scaler, encoder, imputer, or feature selector must <strong>fit only on that round’s training folds</strong>, then transform its validation fold. A pipeline makes that boundary happen automatically when used with cross-validation.</p>
+  <table>
+    <thead><tr><th>Action</th><th>Safe?</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Fit a scaler on the four training folds</td><td>Yes</td><td>The validation fold remains unseen while the scaler learns its statistics.</td></tr>
+      <tr><td>Fit a scaler on all five folds before the round</td><td>No</td><td>The validation fold influences the preprocessing step.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Closed-book check</h2>
+  <p>Choose before reopening the explanation. Each question locks after one choice.</p>
+  <section class="quiz" data-quiz data-answer="Five models" data-explanation="In five-fold cross-validation, each of the five folds is held out once. That requires five train-and-validate rounds, so five fitted models.">
+    <strong>In five-fold cross-validation, how many separate train-and-validate rounds occur?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="One model">One model</button>
+      <button class="quiz-option" data-value="Five models">Five models</button>
+      <button class="quiz-option" data-value="Four models">Four models</button>
+      <button class="quiz-option" data-value="Ten models">Ten models</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+  <section class="quiz" data-quiz data-answer="Average scores" data-explanation="Each fold provides one validation score. Cross-validation reports their average as an estimate from the training data.">
+    <strong>What is the usual summary of the five validation scores?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="First score">First score</button>
+      <button class="quiz-option" data-value="Best score">Best score</button>
+      <button class="quiz-option" data-value="Average scores">Average scores</button>
+      <button class="quiz-option" data-value="Final test">Final test</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>Transfer prompt</h2>
+  <p>A team has 1,000 training records and uses five-fold CV to choose between two models. In one sentence, say what happens to a single record across the five rounds.</p>
+
+  <h2>Primary source</h2>
+  <p>Read scikit-learn’s <a href="https://scikit-learn.org/stable/modules/cross_validation.html">Cross-validation: evaluating estimator performance</a> guide. It defines k-fold CV, explains why scores are averaged, and shows safe preprocessing with a pipeline.</p>
+
+  <div class="callout">Ask me to walk through one record’s journey across the five rounds. When ready, answer the transfer prompt or say <strong>“quiz me on cross-validation.”</strong></div>
+</main>
+</body>
+</html>

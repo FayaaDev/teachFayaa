@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Local model size · Quick reference</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body><main>
+  <header><div class="eyebrow">Quick reference / 01</div><h1>Count × precision = storage</h1><nav><a href="../lessons/0001-same-weights-fewer-bits.html">Back to lesson 01</a></nav></header>
+  <div class="rule" id="formula"><strong>Approximate weight GB = billions of parameters × average bits/weight ÷ 8.</strong><br>27 × 2.9 ÷ 8 ≈ 9.8 GB.</div>
+  <p>Use an effective average that accounts for the quantization scheme, not just the digit in its name. File size and rounded parameter counts introduce approximation.</p>
+  <h2 id="glossary">Working glossary</h2>
+  <dl>
+    <dt>Parameter</dt><dd>A numerical value adjusted during training. “27B” means about 27 billion parameters.</dd>
+    <dt>Weight</dt><dd>A learned numerical coefficient. Most parameters are weights; use weight count as the practical shorthand for this lesson's estimate.</dd>
+    <dt>Quantization</dt><dd>Representing numerical values at reduced precision, saving storage with a possible quality trade-off.</dd>
+    <dt>Bits per weight (bpw)</dt><dd>Average storage bits used for each weight. Mixed precision and supporting scales mean this can be fractional.</dd>
+    <dt>Checkpoint</dt><dd>A particular saved set of model parameters. A fine-tune can produce a different checkpoint with the same parameter count.</dd>
+    <dt>GGUF</dt><dd>A model file format used by runtimes such as llama.cpp. Q4_K_M and UD-Q2_K_XL name quantization presets, not model identities.</dd>
+    <dt>GB / GiB</dt><dd>GB = 1,000,000,000 bytes; GiB = 1,073,741,824 bytes. Thus 9.83 GB ≈ 9.15 GiB.</dd>
+    <dt>RAM / VRAM</dt><dd>System working memory / GPU working memory. Some devices share a unified memory pool: do not count that pool twice.</dd>
+    <dt>Context / KV cache</dt><dd>Context is the tokens considered in generation. A KV cache stores attention calculations for reuse; its memory needs depend on model and settings.</dd>
+  </dl>
+  <h2 id="comparison">Before choosing a download</h2>
+  <ol>
+    <li>Identify the model family, version, checkpoint, and parameter count.</li>
+    <li>Check the actual download size and quantization format.</li>
+    <li>Budget loaded weights, cache/state, and buffers against <em>available</em> memory.</li>
+    <li>Check runtime and hardware support. Partial CPU offloading may fit but changes speed.</li>
+    <li>Compare quality on your task. More parameters or more bits alone do not establish the best model.</li>
+  </ol>
+  <footer><p>Sources: <a href="https://huggingface.co/docs/transformers/quantization/concept_guide">Quantization concepts</a> · <a href="https://unsloth.ai/docs/basics/dynamic-3.0-ggufs">Dynamic GGUFs</a> · <a href="https://huggingface.co/docs/transformers/kv_cache">KV cache</a> · <a href="https://github.com/cobanov/PS5LM/blob/main/docs/MODELS.md">PS5LM models</a>.</p></footer>
+</main></body>
+</html>

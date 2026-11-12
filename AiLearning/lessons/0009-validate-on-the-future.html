@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 9: Validate on the Future</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="../sessions/03-unsupervised-learning-and-features/SESSION.md">Session folder</a><a href="0008-cross-validation-is-a-rotation.html">Lesson 8</a><a href="../reference/session-03-learning-safety.html">Session 3 reference</a></nav>
+  <p class="eyebrow">Session 03 extension · 8 minutes · D2</p>
+  <h1>Validate on the future</h1>
+  <p class="dek">Your tangible win: choose a time-ordered split when a model will predict later events from earlier ones.</p>
+
+  <h2>Ordinary folds can break time</h2>
+  <p>Ordinary k-fold cross-validation can place a December record in training and a January record in validation. For forecasting, fraud trends, demand, or other time-dependent work, that lets the model learn from the future.</p>
+  <p>The production question is: <strong>“Given what we knew then, could we predict what happened next?”</strong> The evaluation must ask the same question.</p>
+
+  <h2>Expanding-window validation</h2>
+  <p>Start with earlier periods for training and validate on the next period. Then move forward. Training data grows, while validation always stays later:</p>
+  <table>
+    <thead><tr><th>Round</th><th>Train on</th><th>Validate on</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>January–February</td><td>March</td></tr>
+      <tr><td>2</td><td>January–March</td><td>April</td></tr>
+      <tr><td>3</td><td>January–April</td><td>May</td></tr>
+    </tbody>
+  </table>
+  <p>Notice: March is validation in round 1, then it may become training data in round 2. That is safe because April happens after March. Time only moves forward.</p>
+  <div class="rule"><strong>Memory rule:</strong> train on the past; validate on the next future period.</div>
+
+  <h2>When to use it</h2>
+  <p>Use a time-ordered split when the order carries information or the deployed model will predict future observations: sales forecasts, traffic volume, prices, or behavior that changes over time.</p>
+  <p>A random split can still be appropriate when records are independent and time does not create a realistic future-prediction boundary. The deciding constraint is not the algorithm; it is whether a future-looking production scenario exists.</p>
+
+  <h2>Keep preprocessing inside each round</h2>
+  <p>Time order does not replace the leakage rule. In every round, fit the scaler, encoder, imputer, or feature selector using only the training periods. Then transform the later validation period with that fitted process.</p>
+
+  <h2>Closed-book check</h2>
+  <p>Choose before reopening the explanation. Each question locks after one choice.</p>
+  <section class="quiz" data-quiz data-answer="Past then future" data-explanation="A time-series evaluation must reproduce deployment: learn from earlier observations, then evaluate on a later period.">
+    <strong>For next-week demand forecasting, which split preserves the production timeline?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Random all weeks">Random all weeks</button>
+      <button class="quiz-option" data-value="Past then future">Past then future</button>
+      <button class="quiz-option" data-value="Future then past">Future then past</button>
+      <button class="quiz-option" data-value="Same week twice">Same week twice</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+  <section class="quiz" data-quiz data-answer="March data" data-explanation="After validating March, a later round can train on March because it is still earlier than the new validation period, April.">
+    <strong>In round 2 above, which newly available month can join training before validating April?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="April data">April data</button>
+      <button class="quiz-option" data-value="March data">March data</button>
+      <button class="quiz-option" data-value="May data">May data</button>
+      <button class="quiz-option" data-value="June data">June data</button>
+    </div>
+    <p class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>Transfer prompt</h2>
+  <p>You predict daily electricity demand for July. You have data from January through June. Describe one safe train/validation split in one sentence.</p>
+
+  <h2>Primary source</h2>
+  <p>Read scikit-learn’s <a href="https://scikit-learn.org/stable/modules/cross_validation.html#time-series-split">TimeSeriesSplit</a> documentation. It explains why time series require a different cross-validation order and how successive training sets expand.</p>
+
+  <div class="callout">Ask me to make an expanding-window timeline with your own example. When ready, answer the transfer prompt or say <strong>“quiz me on time-series cross-validation.”</strong></div>
+</main>
+</body>
+</html>

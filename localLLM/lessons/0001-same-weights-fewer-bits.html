@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>01 · Same weights, fewer bits</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body><main>
+  <header>
+    <div class="eyebrow">Local models / Lesson 01 / 5 minutes</div>
+    <h1>Same weights.<br>Fewer bits.</h1>
+    <p>Your win: explain how a 27B model can occupy roughly 9.8 GB without becoming a smaller-parameter model.</p>
+    <nav><a href="../reference/0001-model-size.html">Printable reference &amp; glossary</a> · <a href="../MISSION.md">Your mission</a></nav>
+  </header>
+
+  <h2 id="numbers">1. A model contains learned numbers</h2>
+  <p>Training adjusts numerical values called <strong>parameters</strong>. Most are called <strong>weights</strong>; for today's storage estimate, think of them as the model's learned numbers. They influence how the model turns an input into its next-token predictions.</p>
+  <p><strong>27B means approximately 27 billion parameters.</strong> It does not mean 27 GB, 27 billion facts, or 27 billion words. Think of a huge mixing desk: parameter count is the number of adjustable settings, not the number of songs it knows.</p>
+
+  <h2 id="precision">2. Each number needs a representation</h2>
+  <p>Imagine recording a setting as <code>0.123456</code> versus approximately <code>0.12</code>. The shorter representation loses detail. This is an analogy: actual quantization uses binary codes and shared scales, not shortened decimal strings.</p>
+  <p><strong>Quantization</strong> represents weights with fewer bits. A bit is a binary digit; <strong>8 bits = 1 byte</strong>. Fewer bits reduce storage and can change model outputs. The number of parameters generally stays the same. <a href="https://huggingface.co/docs/transformers/quantization/concept_guide">[1]</a></p>
+
+  <h2 id="estimate">3. Do one useful calculation</h2>
+  <div class="rule"><strong>Weight storage in GB ≈ parameters in billions × average bits per weight ÷ 8.</strong></div>
+  <table>
+    <thead><tr><th>Same approximate count</th><th>Average bits/weight</th><th>Weight-storage estimate</th></tr></thead>
+    <tbody>
+      <tr><td>27B</td><td>16</td><td>54 GB</td></tr>
+      <tr><td>27B</td><td>4.5, illustrative Q4 average</td><td>15.2 GB</td></tr>
+      <tr><td>27B</td><td>2.9, your quoted average</td><td>9.8 GB</td></tr>
+    </tbody>
+  </table>
+  <p class="caption">Decimal GB. These are estimates, not measured downloads. Advertised parameter counts are rounded; files also contain supporting data. Using 2.9 does not establish an exact bits-per-weight measurement.</p>
+
+  <h2 id="names">4. Read your two labels</h2>
+  <p><code>Q4_K_M</code> is a named GGUF quantization preset in the roughly 4-bit family, not a promise that every stored weight costs exactly 4 bits. Supporting scales and mixed precision affect the effective average.</p>
+  <p><code>UD-Q2_K_XL</code> is an Unsloth Dynamic preset in the roughly 2-bit family. Dynamic quantization allocates different precision to different parts of a model; “Q2” does <em>not</em> mean exactly 2 bits for every weight. Unsloth reports a 9.83 GB Qwen3.8-27B version. <a href="https://unsloth.ai/docs/basics/dynamic-3.0-ggufs">[2]</a></p>
+  <p>“Uncensored” describes a claimed behavior or model modification, not a storage format or a quality score. We need your exact model link to know whether both downloads come from the same checkpoint.</p>
+
+  <h2 id="fit">5. Storage is only the first fit check</h2>
+  <div class="rule">Runtime memory ≈ loaded weights + conversation cache/state + working buffers.<br>Also leave room for the operating system and other applications.</div>
+  <p>A 9.8 GB file is not a guarantee of running inside 10 GB of available memory. Context length, model architecture, runtime settings, and CPU/GPU placement matter. A KV cache is extra memory used to reuse attention calculations. <a href="https://huggingface.co/docs/transformers/kv_cache">[3]</a></p>
+  <p>PS5LM's own model list gives this Q2 download as 9.15 GiB (about 9.83 GB) and makes fit conditional on its memory probe. The two units describe approximately the same size. <a href="https://github.com/cobanov/PS5LM/blob/main/docs/MODELS.md">[4]</a></p>
+
+  <h2 id="practice">Your turn · close the table first</h2>
+  <p>You have the same 27B model in two versions: average 4 bits per weight and average 2 bits per weight. Which uses less weight storage? Choose your prediction before opening its feedback.</p>
+  <details><summary>Four bits</summary><p>Try again. The number of weights is unchanged, but each takes more space. Compare 27 × 4 ÷ 8 with 27 × 2 ÷ 8.</p></details>
+  <details><summary>Two bits</summary><p>Correct: 6.75 GB versus 13.5 GB in this simplified calculation. Halving the average bits halves weight storage; it does not halve parameter count.</p></details>
+  <p><strong>Transfer check:</strong> can you promise that the 6.75 GB version runs on a machine with 8 GB total memory?</p>
+  <details><summary>Reveal reasoning</summary><p>No. You still need the available-memory budget, runtime support, context/cache requirements, and buffers. Fitting the weights is necessary for full residency, but is not the complete runtime budget.</p></details>
+
+  <footer>
+    <p><strong>Primary reading:</strong> the introduction to <a href="https://huggingface.co/docs/transformers/quantization/concept_guide">Hugging Face's quantization concepts</a>. Skip the equations for now.</p>
+    <p><strong>Tomorrow:</strong> without looking, explain why “27B” can coexist with “9.8 GB.” Then check the <a href="../reference/0001-model-size.html#formula">reference formula</a>.</p>
+    <p>Ask your teaching agent any follow-up questions. Send your device, memory, and exact model links so the next lesson can work through your real fit budget.</p>
+  </footer>
+</main></body>
+</html>

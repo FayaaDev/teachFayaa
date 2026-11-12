@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Token Cost Reference</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body><main>
+  <p class="eyebrow">Quick reference</p>
+  <h1>Token Costs, Not Byte Costs</h1>
+  <div class="grid">
+    <div class="cell"><strong>Character</strong>What a reader sees, such as <span lang="ar" dir="rtl">م</span> or <code>A</code>.</div>
+    <div class="cell"><strong>UTF-8 byte</strong>How a character is encoded for storage or transport. ASCII <code>A</code> uses 1 byte; Arabic <span lang="ar" dir="rtl">م</span> uses 2.</div>
+    <div class="cell"><strong>Token</strong>A model-specific piece of text, assigned an integer by its tokenizer. This is normally what an LLM API bills.</div>
+  </div>
+  <h2>The causal chain</h2>
+  <p><strong>Text → UTF-8 bytes → tokenizer merges/splits byte sequences → tokens → API price.</strong></p>
+  <p>UTF-8 makes Arabic text occupy more bytes than ASCII English, but bytes do not determine the number of tokens. A tokenizer’s vocabulary and merges determine it. The same text can tokenize differently under different models.</p>
+  <h2>Budget formula</h2>
+  <p class="formula">cost = (input_tokens × input_rate + cached_input_tokens × cached_rate + output_tokens × output_rate) ÷ 1,000,000</p>
+  <p>Rates are the provider’s listed price per million tokens. Multiply the result by requests per period. Measure each language and request type separately; do not translate a character count into a budget.</p>
+  <h2>Public-safe explanation</h2>
+  <p>“Arabic is not automatically charged per byte. It may cost more for the same intended message when this model’s tokenizer needs more tokens to represent Arabic. We verify that with the model’s tokenizer and price the tokens.”</p>
+  <p class="caption">Sources: <a href="https://github.com/openai/tiktoken">tiktoken README</a>; <a href="https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb">OpenAI token-counting cookbook</a>.</p>
+</main></body></html>

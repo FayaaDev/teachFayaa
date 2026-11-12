@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Why Arabic May Cost More in an LLM API</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body><main>
+  <p class="eyebrow">Lesson 1 · 8 minutes</p>
+  <h1>Arabic may cost more.<br>UTF-8 is not the bill.</h1>
+  <p class="lede">For a public explanation and a credible budget, separate three layers: the characters people read, the bytes computers store, and the tokens an LLM API usually charges for.</p>
+
+  <div class="callout"><strong>The accurate headline:</strong> Arabic can cost more <em>for comparable meaning</em> when the chosen model’s tokenizer produces more Arabic tokens than English tokens. It is not universally true, and it is not because an API has a price per UTF-8 byte.</div>
+
+  <h2>Three different counts</h2>
+  <div class="grid">
+    <div class="cell"><strong>Characters</strong><code>A</code> and <span lang="ar" dir="rtl">م</span> are each one Unicode character.</div>
+    <div class="cell"><strong>UTF-8 bytes</strong><code>A</code> is one byte (<code>41</code>). <span lang="ar" dir="rtl">م</span> is two bytes (<code>D9 85</code>).</div>
+    <div class="cell"><strong>Tokens</strong>The model-specific units sent to, and typically billed by, the API.</div>
+  </div>
+  <p>UTF-8 affects the byte stream the tokenizer receives. A byte-pair tokenizer then uses its learned vocabulary to combine byte sequences into tokens. If it learned useful Arabic pieces, it can combine them efficiently; if not, it may produce many smaller pieces. That learned vocabulary, not UTF-8 alone, creates the cost difference.</p>
+  <p class="caption">OpenAI’s <a href="https://github.com/openai/tiktoken">tiktoken documentation</a> describes BPE as a lossless compression of bytes into common subwords. Its <a href="https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb">token-counting cookbook</a> notes that API usage is priced by token and different models use different encodings.</p>
+
+  <h2>What actually gets priced</h2>
+  <p>For a request, use the provider’s reported counts. A general budget is:</p>
+  <p class="formula">request cost = (input tokens × input rate + output tokens × output rate) ÷ 1,000,000</p>
+  <p>Include cached-input or tool/reasoning categories only if your provider reports and prices them separately. Use the model’s current price page rather than hard-coding a rate in public material.</p>
+
+  <div class="tool">
+    <h3>Cost calculator</h3>
+    <p class="caption">Enter the actual token counts from your API response or the chosen model’s tokenizer. This deliberately does not guess tokens from bytes.</p>
+    <label for="inputTokens">Input tokens</label><input id="inputTokens" type="number" min="0" value="250">
+    <label for="outputTokens">Output tokens</label><input id="outputTokens" type="number" min="0" value="100">
+    <label for="inputRate">Input price per 1M tokens (USD)</label><input id="inputRate" type="number" min="0" step="any" value="1">
+    <label for="outputRate">Output price per 1M tokens (USD)</label><input id="outputRate" type="number" min="0" step="any" value="4">
+    <button type="button" id="calculate">Calculate request cost</button>
+    <p id="costResult" class="result" aria-live="polite"></p>
+  </div>
+
+  <h2>Measure, then compare</h2>
+  <p>Take paired prompts that request the same task, such as an English and Arabic version of a support reply. Count each with the <strong>exact model tokenizer</strong>, then send representative traffic and use the API response’s usage fields as the production truth.</p>
+  <p>For each language and request type, record median and 95th-percentile input and output tokens. Budget monthly cost from those measurements. A useful presentation metric is <em>tokens per completed task</em>, not tokens per character or cost per byte.</p>
+  <p><strong>Important distinction:</strong> JSON requests are transmitted as UTF-8 bytes, which can affect bandwidth or a different service’s byte-based limit. That is separate from an LLM provider’s token invoice.</p>
+
+  <div class="exercise">
+    <h3>Retrieval check</h3>
+    <p>Which quantity should you use to price a model request?</p>
+    <div class="quiz-options"><button type="button" data-answer="bytes">bytes!</button><button type="button" data-answer="tokens">tokens</button><button type="button" data-answer="chars">chars!</button></div>
+    <p id="quizResult" class="answer" aria-live="polite"></p>
+  </div>
+
+  <h2>One sentence for the public</h2>
+  <p>“Arabic can require more billable tokens than English for the same task on a particular model, because its tokenizer may encode Arabic less compactly; the bill follows tokens, not UTF-8 bytes.”</p>
+
+  <hr>
+  <p><strong>Primary source to explore:</strong> use the <a href="https://platform.openai.com/tokenizer">OpenAI Tokenizer</a> to inspect a paired Arabic/English prompt for a chosen model. Ask follow-up questions here if any split or budget assumption is unclear.</p>
+  <p><a href="../reference/0001-token-costs.html">Open the printable token-cost reference →</a></p>
+</main>
+<script>
+  const number = (id) => Number(document.getElementById(id).value) || 0;
+  const calculate = () => {
+    const cost = (number('inputTokens') * number('inputRate') + number('outputTokens') * number('outputRate')) / 1_000_000;
+    document.getElementById('costResult').textContent = `Estimated request cost: $${cost.toFixed(6)}`;
+  };
+  document.getElementById('calculate').addEventListener('click', calculate);
+  calculate();
+  document.querySelectorAll('[data-answer]').forEach((button) => button.addEventListener('click', () => {
+    document.getElementById('quizResult').textContent = button.dataset.answer === 'tokens'
+      ? 'Correct. Use the provider-reported token categories and current per-token rates.'
+      : 'Not quite. Bytes and characters can help diagnose tokenization, but the API price is based on tokens.';
+  }));
+</script>
+</body></html>

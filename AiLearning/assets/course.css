@@ -73,10 +73,17 @@ th { font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: .72rem
 .checklist label { display: block; margin: 8px 0; }
 .small { color: var(--muted); font-size: .88rem; }
 
+.folds { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; max-width: var(--measure); margin: 18px 0; }
+.fold { padding: 13px 6px; background: #dfece7; border: 1px solid #a9c7bd; text-align: center; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: .8rem; font-weight: 750; }
+.fold.validation { background: #f7ead1; border-color: #d6af67; }
+.folds-caption { margin-top: -8px; color: var(--muted); font-size: .85rem; }
+
 @media (max-width: 620px) {
   body { font-size: 16px; }
   main { width: 100%; margin: 0; padding: 24px 20px 42px; box-shadow: none; }
   h1 { font-size: 2.65rem; }
+  .folds { gap: 4px; }
+  .fold { padding: 10px 3px; font-size: .68rem; }
 }
 
 @media print {

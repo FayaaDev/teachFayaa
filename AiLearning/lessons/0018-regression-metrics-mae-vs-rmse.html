@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 18: Regression Metrics — MAE vs RMSE</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav>
+    <a href="../sessions/04-model-evaluation-metrics/SESSION.md">Session 4 folder</a>
+    <a href="0017-roc-auc-ranking-quality.html">Lesson 17</a>
+  </nav>
+
+  <p class="eyebrow">Session 04 · 7 minutes · retrieval</p>
+  <h1>Regression metrics — MAE vs RMSE</h1>
+  <p class="dek">Your tangible win: choose MAE or RMSE based on whether large errors hurt more than small ones.</p>
+
+  <h2>Worked example: delivery-time prediction</h2>
+  <p>A logistics company predicts delivery time in minutes. An error of 5 minutes is acceptable; an error of 30 minutes causes a customer to miss a connecting flight. The company therefore penalises large errors more heavily than small ones.</p>
+
+  <div class="rule"><strong>Memory rule:</strong> use RMSE when large errors are disproportionately expensive; use MAE when every minute of error costs the same.</div>
+
+  <h2>Closed-book check</h2>
+  <section class="quiz" data-quiz data-answer="Use RMSE because large errors hurt more" data-explanation="A 30-minute error is far more damaging than six 5-minute errors, so RMSE is the better choice.">
+    <strong>For the delivery-time model, which metric should the company watch?</strong>
+    <div class="quiz-options">
+      <button class="quiz-option" data-value="Use RMSE because large errors hurt more">Use RMSE because large errors hurt more</button>
+      <button class="quiz-option" data-value="Use MAE because every minute counts">Use MAE because every minute counts</button>
+      <button class="quiz-option" data-value="Use accuracy because it is simple">Use accuracy because it is simple</button>
+      <button class="quiz-option" data-value="Ignore both and watch R-squared only">Ignore both and watch R-squared only</button>
+    </div>
+    <p class="quiz-feedback"></p>
+  </section>
+
+  <h2>Primary source</h2>
+  <p>scikit-learn — “Metrics and scoring: quantifying the quality of predictions” (regression section): <a href="https://scikit-learn.org/stable/modules/model_evaluation.html">https://scikit-learn.org/stable/modules/model_evaluation.html</a></p>
+
+  <p class="note">Ask me any follow-up — the agent is your teacher.</p>
+</main>
+</body>
+</html>
